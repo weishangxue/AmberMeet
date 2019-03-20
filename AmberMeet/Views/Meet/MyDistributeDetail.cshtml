@@ -1,0 +1,86 @@
+﻿<div id="myDistributeDetailContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myDistributeDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+                </button>
+                <h4 class="modal-title">发起会议</h4>
+            </div>
+            <div class="modal-body">
+                <div id="myDistributeDetailErrorContainer" class="error"></div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="subject">主题</label>
+                            <input id="subject" name="subject" class="form-control" placeholder="主题"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-11">
+                        <div class="form-group">
+                            <label for="body">内容</label>
+                            <textarea class="form-control" id="body" name="body" placeholder="内容"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="startTime">开始时间</label>
+                            <input id="startTime" name="startTime" class="form-control" placeholder="开始时间"/>
+                        </div>
+                    </div>
+                    <div class="col-md-5" style="width: 46.7%">
+                        <div class="form-group">
+                            <label for="endTime">结束时间(预)</label>
+                            <input id="endTime" name="endTime" class="form-control" placeholder="结束时间"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-11">
+                        <div class="form-group">
+                            <label for="place">地点(会议室)</label>
+                            <input id="place" name="place" class="form-control" placeholder="会议地点"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-11">
+                        <div class="form-group">
+                            <label for="needFeedback">需要反馈</label>
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" name="needFeedback" value="true" id="needFeedback"> 是
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="needFeedback" value="false" id="needFeedbackNo"> 否
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-11">
+                        <div class="form-group">
+                            <label for="signors" id="signorsLabel">参与者</label>
+                            <input type="hidden" id="signors" name="signors" value=""/>
+                            <a href="#" id="addSignorButton">
+                                <i class="icon-plus"></i>
+                            </a>
+                            <div id="signorNamesContainer">
+                                @*<span class="label" userid={userId}><i class="icon-user">{userName};</i></span>&nbsp;*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-default" id="myDistributeDetailCancelButton">取消</a>
+                <a class="btn btn-primary" id="myDistributeDetailSubmitButton">确认</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
+}
+<script src="~/AppFrontend/angel-js/angel.layout.menu.js"></script>
+<nav class="menu col-md-2" data-ride="menu" style="padding-right: 2px">
+    <ul class="tree tree-menu" data-ride="tree">
+        <li>
+            <a href="~/Meet/Index">
+                <i class="icon icon-th"></i>
+                导航栏
+                <i class="icon icon-refresh"></i>
+            </a>
+        </li>
+        <li>
+            <a href="#" linkurl="../Meet/MyDistributeList?createMeet=1" class="icon icon-play">发起会议</a>
+        </li>
+        <li class="open">
+            <a href="#"><i class="icon icon-paste"></i>我的发起</a>
+            <ul>
+                <li class="active">
+                    <a href="#" linkurl="../Meet/MyDistributeList" title="发起并待激活的会议">已发起(@ViewBag.MyDistributeCount)</a>
+                </li>
+                <li>
+                    <a href="#" title="发起已激活的会议">已激活(0)</a>
+                </li>
+                <li>
+                    <a href="#" title="所有已发起的会议(含已取消)">发起记录</a>
+                </li>
+            </ul>
+        </li>
+        <li class="open">
+            <a href="#"><i class="icon icon-time"></i>我的签收</a>
+            <ul>
+                <li>
+                    <a href="#" title="未签收的会议">待签收(0)</a>
+                </li>
+                <li>
+                    <a href="#" title="已签收并待激活的会议">已签收(0)</a>
+                </li>
+                <li>
+                    <a href="#" title="所有已签收的会议(含已取消)">签收记录</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+<div class="col-md-10 page-collapsed" style="padding-left: 0">
+    <iframe id="boxContent" name="boxContent" style="border: none; width: 100%;"> </iframe>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var reSetMenu = function() {
+            var height = $('#boxContent').height() * 0.87;
+            $('.tree-menu').css('height', height + 'px').css('overflow', 'auto');
+        };
+        $(window).bind("resize", function() { reSetMenu(); });
+        reSetMenu();
+    });
+</script>

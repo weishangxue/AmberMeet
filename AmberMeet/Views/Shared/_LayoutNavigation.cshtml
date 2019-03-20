@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = ViewBag.Title;
+    Layout = "_Layout.cshtml";
+}
+<nav class="navbar navbar-inverse" role="navigation" style="margin-bottom: 1px;">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-example">
+            <span class="sr-only">切换导航</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="~/Organization/UserList" style="padding-top: 2.5px;">
+            <img src="~/AppFrontend/images/logo_navbar_201903071223.png" style="height: 36px; width: auto;"/>
+        </a>
+    </div>
+    <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li class="active">
+                <a href="~/Meet/MyDistributeList" nav="/Meet/">我的会议</a>
+            </li>
+            <li>
+                <a href="#">我的日程</a>
+            </li>
+            <li>
+                <a href="~/Organization/UserList" nav="/Organization/">用户管理</a>
+            </li>
+            <li>
+                <a href="#">流程示意图</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    @ViewBag.sessionUserRealName <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="#" onclick="angel.openWnd('../Home/UserProfile', 300)">我的信息</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="angel.openWnd('../Home/ChangePassword')">修改密码</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="~/Home/Logout">注销</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div id="navContent" name="navContent">
+    @RenderBody()
+</div>

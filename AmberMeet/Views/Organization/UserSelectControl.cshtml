@@ -1,0 +1,152 @@
+﻿<div id="7212c32d4c654e2ab83ad880be1f268fContainer" class="modal fade" style="z-index: 2051" tabindex="-1" role="dialog" aria-labelledby="7212c32d4c654e2ab83ad880be1f268fModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title" id="7212c32d4c654e2ab83ad880be1f268fModalLabel">用户选择</h4>
+        </div>
+        <div class="modal-body">
+            <div class="input-group">
+                <input type="text" id="7212c32d4c654e2ab83ad880be1f268fSearchText" class="form-control" placeholder="模糊条件">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" id="7212c32d4c654e2ab83ad880be1f268fSearchButton">搜索</button>
+                </span>
+            </div>
+            <div style="height: 3px; width: 100%;"></div>
+            <table id="7212c32d4c654e2ab83ad880be1f268fList"></table>
+            <div id="7212c32d4c654e2ab83ad880be1f268fListPager"></div>
+        </div>
+        <div class="modal-footer">
+            <span class="input-group-btn">
+                <a class="btn btn-default" id="7212c32d4c654e2ab83ad880be1f268fCancelButton">取消</a>
+                @*<a class="btn btn-default" id="7212c32d4c654e2ab83ad880be1f268fYesButton">确定</a>*@
+            </span>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() { angel.userSelectControl.initialize(); });
+    angel.userSelectControl = (function($) {
+        var $controlContainer = $("#7212c32d4c654e2ab83ad880be1f268fContainer");
+        var $searchText = $("#7212c32d4c654e2ab83ad880be1f268fSearchText");
+        var $searchButton = $("#7212c32d4c654e2ab83ad880be1f268fSearchButton");
+        var $grid = $("#7212c32d4c654e2ab83ad880be1f268fList");
+        var gridPager = "#7212c32d4c654e2ab83ad880be1f268fListPager";
+        var $cancelButton = $("#7212c32d4c654e2ab83ad880be1f268fCancelButton");
+
+        var selectButtonHandler = function() {};
+        var cancelButtonHandler = function() {};
+
+        var that = {};
+
+        var initializeGridWidth = function() {
+            var width = 568;
+            var searchTextParentWidth = $searchText.parent().width();
+            if (width < searchTextParentWidth) {
+                width = searchTextParentWidth;
+            }
+            $grid.setGridWidth(width);
+            $(".ui-jqgrid-htable", $controlContainer).width($(".ui-jqgrid-hdiv", $controlContainer).width() - 1);
+            $(".ui-jqgrid-btable", $controlContainer).width($(".ui-jqgrid-hdiv", $controlContainer).width());
+            $(".ui-jqgrid-title", $controlContainer).css("color", "white");
+        };
+
+        var initializeGrid = function() {
+            $grid.jqGrid({
+                datatype: 'local',
+                colNames: ["姓名", "邮箱", "手机", "选择"],
+                colModel: [
+                    { name: "Name", index: "Name", width: 60, sortable: false },
+                    { name: "Mail", index: "Mail", width: 80, sortable: false },
+                    { name: "Mobile", index: "Mobile", width: 80, sortable: false },
+                    { name: "select", index: "select", width: 40, sortable: false }
+                ],
+                caption: null,
+                hidegrid: false,
+                sortname: null,
+                sortorder: '',
+                shrinkToFit: true, //false
+                pager: gridPager,
+                rowNum: 10,
+                rowList: [10, 20, 30],
+                viewrecords: true,
+                rownumbers: false,
+                multiselect: false,
+                height: 300,
+                width: 660,
+                autowidth: true,
+                styleUI: 'Bootstrap',
+                gridComplete: function() {
+                    $('button[name="7212c32d4c654e2ab83ad880be1f268fListSelectButton"]', $grid).click(function() {
+                        var selectItem = {
+                            userId: $(this).attr("userid"),
+                            userName: $(this).attr("username")
+                        };
+                        selectButtonHandler(selectItem);
+                        $controlContainer.modal("hide");
+                    });
+                }
+            });
+            var pager = { refresh: true, search: false, edit: false, add: false, del: false };
+            $grid.jqGrid("navGrid", gridPager, pager, { height: 200, reloadAfterSubmit: true });
+        };
+
+        var initGridData = function() {
+            var url = "../Organization/GetUserSelectControlUserList?keywords=" + $searchText.val();
+            angel.ajaxGet(url,
+                function(data) {
+                    var result = $.parseJSON(data);
+                    if (result.result != 0) {
+                        angel.alert(result.resultValue);
+                        return;
+                    }
+                    $grid.clearGridData();
+                    var list = result.resultValue;
+                    for (var iUserListSelectIndex = 0;
+                        iUserListSelectIndex < list.length;
+                        iUserListSelectIndex++) {
+                        var user = list[iUserListSelectIndex];
+                        var selectButtonTmp =
+                            "<button type='button' name='7212c32d4c654e2ab83ad880be1f268fListSelectButton' " +
+                                "userid='{userid}' username='{username}' class='btn btn-sm'>选择</button>";
+                        var selectButton = selectButtonTmp
+                            .replace("{userid}", user.Id)
+                            .replace("{username}", user.Name);
+                        list[iUserListSelectIndex].select = selectButton;
+                    }
+                    $grid.setGridParam({ data: list });
+                    $grid.trigger("reloadGrid");
+                });
+        };
+
+        that.initialize = function() {
+            $searchButton.click(function() { initGridData(); });
+            $cancelButton.click(function() {
+                cancelButtonHandler();
+                $controlContainer.modal("hide");
+            });
+
+            $(window).bind("resize", function() { initializeGridWidth(); });
+            initializeGrid();
+            initGridData();
+        };
+
+        that.show = function(confirmHandler, cancelHandler) {
+            if ($.isFunction(confirmHandler)) {
+                selectButtonHandler = confirmHandler;
+            }
+            if ($.isFunction(cancelHandler)) {
+                cancelButtonHandler = cancelHandler;
+            }
+
+            $controlContainer.modal({ backdrop: "static", keyboard: false });
+            $controlContainer.modal("show");
+            $searchText.val("");
+            initGridData();
+            initializeGridWidth();
+        };
+        return that;
+    })(jQuery);
+</script>
