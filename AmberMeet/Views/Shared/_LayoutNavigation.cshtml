@@ -10,18 +10,18 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="~/Organization/UserList" style="padding-top: 2.5px;">
+        <a class="navbar-brand" href="~/Meet/Index" style="padding-top: 2.5px;">
             <img src="~/AppFrontend/images/logo_navbar_201903071223.png" style="height: 36px; width: auto;"/>
         </a>
     </div>
     <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
             <li class="active">
-                <a href="~/Meet/MyDistributeList" nav="/Meet/">我的会议</a>
+                <a href="~/Meet/Index" nav="/Meet/">我的会议</a>
             </li>
-            <li>
+            @*<li>
                 <a href="#">我的日程</a>
-            </li>
+            </li>*@
             <li>
                 <a href="~/Organization/UserList" nav="/Organization/">用户管理</a>
             </li>
@@ -36,7 +36,7 @@
                 </a>
                 <ul class="dropdown-menu" role="menu">
                     <li>
-                        <a href="#" onclick="angel.openWnd('../Home/UserProfile', 300)">我的信息</a>
+                        <a href="#" onclick="angel.openWnd('../Home/UserProfile')">我的信息</a>
                     </li>
                     <li>
                         <a href="#" onclick="angel.openWnd('../Home/ChangePassword')">修改密码</a>

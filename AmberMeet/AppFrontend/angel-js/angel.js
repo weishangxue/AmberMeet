@@ -70,12 +70,12 @@
         return null;
     };
 
-    that.openWnd = function(url, height, width) {
+    that.openWnd = function(url, width, height) {
         if (!width) {
             width = $(window).width() * 0.6;
         }
         if (!height) {
-            height = $(window).height() * 0.7;
+            height = $(window).height() * 0.8;
         }
         var top = ($(window).height() - height) / 3;
         var left = ($(window).width() - width) / 2;

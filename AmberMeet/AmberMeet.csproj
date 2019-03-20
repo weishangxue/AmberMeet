@@ -265,7 +265,6 @@
     <Content Include="AppFrontend\bower_components\zui\fonts\zenicon.eot" />
     <Content Include="AppFrontend\bower_components\zui\fonts\zenicon.ttf" />
     <Content Include="AppFrontend\bower_components\zui\fonts\zenicon.woff" />
-    <Content Include="libman.json" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\LoginError.cshtml" />
@@ -288,7 +287,6 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\Home\UserProfile.cshtml" />
     <Content Include="Views\Meet\MyDistributeList.cshtml" />
-    <Content Include="Views\Meet\_Layout.cshtml" />
     <Content Include="Views\Meet\MyDistributeDetail.cshtml" />
     <Content Include="Views\Organization\UserSelectControl.cshtml" />
     <Content Include="Views\Meet\Index.cshtml" />

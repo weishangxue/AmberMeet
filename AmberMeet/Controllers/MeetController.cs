@@ -28,7 +28,6 @@ namespace AmberMeet.Controllers
                 return ErrorLoginView();
             }
             ViewBag.myDistributeCount = _meetService.GetMyDistributeCount(SessionUserId);
-            ViewBag.meetStates = MeetState.Activate.GetDescriptions();
             return View();
         }
 
@@ -39,7 +38,7 @@ namespace AmberMeet.Controllers
                 return ErrorLoginView();
             }
 
-            ViewBag.meetStates = MeetState.Activate.GetDescriptions();
+            //ViewBag.meetStates = MeetState.Activate.GetDescriptions();
             return View();
         }
 
