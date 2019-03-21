@@ -1,0 +1,42 @@
+﻿<div id="userRoleChangeContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="userRoleChangeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 300px;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+            </button>
+            <h4 class="modal-title">更换角色</h4>
+        </div>
+        <div class="modal-body" style="padding-top: 3px;">
+            <div id="userRoleChangeErrorContainer" class="error"></div>
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="form-group">
+                        <label for="userName">姓名</label>
+                        <input id="userName" name="userName" class="form-control" placeholder="姓名" readonly="readonly"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="form-group">
+                        <label for="userRole">角色</label>
+                        <select class="form-control" id="userRole" name="userRole">
+                            <option value="">所属角色</option>
+                            @{
+                                foreach (var userRole in ViewBag.userRoles)
+                                {
+                                    <option value="@userRole.Key">@userRole.Value</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-default" id="userRoleChangeCancelButton">取消</a>
+            <a class="btn btn-primary" id="userRoleChangeSubmitButton">确认</a>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="userRoleChangeUserId" name="userRoleChangeUserId"/>

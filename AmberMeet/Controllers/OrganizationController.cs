@@ -31,6 +31,7 @@ namespace AmberMeet.Controllers
                 if (!IsValidAccount(UserRole.Manager))
                     return ErrorLoginView();
                 ViewBag.userStates = UserState.Normal.GetDescriptions();
+                ViewBag.userRoles = UserRole.Ordinay.GetDescriptions().Where(i => i.Key != (int) UserRole.System);
                 return View();
             }
             catch (Exception ex)
@@ -54,7 +55,7 @@ namespace AmberMeet.Controllers
                     ViewData["userId"] = user.Id;
                     ViewData["status"] = user.Status;
                     ViewData["statusName"] = ((UserState) user.Status).ToEnumText();
-                    ViewData["account"] = user.Account;
+                    ViewData["loginName"] = user.LoginName;
                     ViewData["name"] = user.Name;
                     ViewData["code"] = user.Code;
                     ViewData["mobile"] = user.Mobile;
@@ -141,6 +142,24 @@ namespace AmberMeet.Controllers
             }
         }
 
+        [HttpGet]
+        public string GetUser(string userId)
+        {
+            try
+            {
+                if (!IsValidAccount())
+                {
+                    return OkLoginError();
+                }
+                return _userService.Get(userId).ToJson();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ExceptionLog(ex);
+                return Ok(false, HtmlHelper.Encode(ex.Message));
+            }
+        }
+
         [HttpPost]
         public string PutUser(FormCollection form)
         {
@@ -157,7 +176,7 @@ namespace AmberMeet.Controllers
                 }
                 var dto = new OrgUser
                 {
-                    Account = form["account"],
+                    Account = form["loginName"],
                     Name = form["name"],
                     Code = form["code"],
                     Mobile = form["mobile"],
@@ -273,6 +292,30 @@ namespace AmberMeet.Controllers
                     return Ok(false, "用户ID不允许为空。");
                 }
                 _userService.ReactivationUser(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ExceptionLog(ex);
+                var result = HtmlHelper.Encode(ex.Message);
+                return Ok(false, result);
+            }
+        }
+
+        [HttpPost]
+        public string PutUserRole(string userId, int userRole)
+        {
+            try
+            {
+                if (!IsValidAccount(UserRole.Manager))
+                {
+                    return OkLoginError();
+                }
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Ok(false, "用户ID不允许为空。");
+                }
+                _userService.ChangeUserRole(userId, (UserRole) userRole);
                 return Ok();
             }
             catch (Exception ex)

@@ -20,7 +20,8 @@ namespace AmberMeet.Models
                     item.Mobile,
                     item.SexText,
                     item.BirthdayText,
-                    item.RoleText
+                    item.RoleText,
+                    GetSelectBtn(item.Id)
                 })).ToList();
             var jsonJqGridObject = new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
             return jsonJqGridObject.ToJson(true);
@@ -31,6 +32,14 @@ namespace AmberMeet.Models
             const string selectItem =
                 "<a name='selectItem' itemId='{itemId}' style='cursor: pointer'>{itemName}</a>";
             return selectItem.Replace("{itemId}", itemId).Replace("{itemName}", itemName);
+        }
+
+        private string GetSelectBtn(string itemId)
+        {
+            const string selectBtn =
+                "<a name='editBtn' itemId='{itemId}' style='cursor: pointer'>编辑</a>" +
+                "&nbsp;|&nbsp;<a name='changeRoleBtn' itemId='{itemId}' style='cursor: pointer'>改角色</a>";
+            return selectBtn.Replace("{itemId}", itemId);
         }
     }
 }

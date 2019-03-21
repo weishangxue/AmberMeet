@@ -2,6 +2,11 @@
     ViewBag.Title = "用户列表";
     Layout = "~/Views/Shared/_LayoutNavigation.cshtml";
 }
+<form id="mainForm">
+    @{ Html.RenderPartial("UserRoleChange"); }
+</form>
+<script src="~/Views/Organization/UserRoleChange.js"></script>
+
 <div class="input-group" style="margin-bottom: 3px;">
     <div class="input-control has-icon-left has-icon-right">
         <input id="searchText" class="form-control" placeholder="关键字" type="search" style="width: 90%">

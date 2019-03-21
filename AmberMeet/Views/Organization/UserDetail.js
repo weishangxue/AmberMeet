@@ -4,7 +4,7 @@
 
     var $userId = $("#userId");
     var $status = $("#status");
-    var $account = $("#account");
+    var $loginName = $("#loginName");
     var $name = $("#name");
     var $mail = $("#mail");
     var $mobile = $("#mobile");
@@ -119,7 +119,7 @@
 
     init();
 
-    $account.rules("add", { required: true, messages: { required: "登录名不允许为空" } });
+    $loginName.rules("add", { required: true, messages: { required: "登录名不允许为空" } });
     $name.rules("add", { required: true, messages: { required: "姓名不允许为空" } });
     $sexMan.rules("add", { required: true, messages: { required: "工人性别必须选择" } });
     $mail.rules("add",
@@ -133,7 +133,7 @@
         });
     $mobile.rules("add", { cnMobile: true, messages: { cnMobile: "手机号码格式错误" } });
     $birthday.rules("add", { dateISO: true, messages: { dateISO: "出生日期必需为日期格式(ISO)。例:2012-02-02" } });
-    angel.addRequiredMark($account);
+    angel.addRequiredMark($loginName);
     angel.addRequiredMark($name);
     angel.addRequiredMark($sexMan);
     angel.addRequiredMark($mail);

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
 using AmberMeet.AppService.Meets;
-using AmberMeet.Domain.Meets;
-using AmberMeet.Dto;
+using AmberMeet.AppService.MeetSignfors;
+using AmberMeet.Dto.Meets;
 using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
 using AmberMeet.Models;
@@ -14,10 +14,12 @@ namespace AmberMeet.Controllers
     {
         private readonly MeetJsonService _meetJsonService;
         private readonly IMeetService _meetService;
+        private readonly IMeetSignforService _meetSignforService;
 
-        public MeetController(IMeetService meetService)
+        public MeetController(IMeetService meetService, IMeetSignforService meetSignforService)
         {
             _meetService = meetService;
+            _meetSignforService = meetSignforService;
             _meetJsonService = new MeetJsonService();
         }
 
@@ -28,6 +30,9 @@ namespace AmberMeet.Controllers
                 return ErrorLoginView();
             }
             ViewBag.myDistributeCount = _meetService.GetMyDistributeCount(SessionUserId);
+            ViewBag.myActivateCount = _meetService.GetMyActivateCount(SessionUserId);
+            ViewBag.myWaitSignforCount = _meetSignforService.GetMyWaitSignforCount(SessionUserId);
+            ViewBag.myAlreadySignedCount = _meetSignforService.GetMyAlreadySignedCount(SessionUserId);
             return View();
         }
 
@@ -37,8 +42,6 @@ namespace AmberMeet.Controllers
             {
                 return ErrorLoginView();
             }
-
-            //ViewBag.meetStates = MeetState.Activate.GetDescriptions();
             return View();
         }
 
@@ -57,8 +60,7 @@ namespace AmberMeet.Controllers
                 {
                     activateDate = DateTimeHelper.GetIsoDateValue(activateIsoDate);
                 }
-                var list = _meetService.GetMyDistributeList(
-                    page, rows, keywords, SessionUserId, MeetState.WaitActivate, activateDate);
+                var list = _meetService.GetMyDistributes(page, rows, keywords, SessionUserId, activateDate);
                 return _meetJsonService.GetJqGridJson(list, page, rows);
             }
             catch (Exception ex)
@@ -78,7 +80,7 @@ namespace AmberMeet.Controllers
                 {
                     return OkLoginError();
                 }
-                return _meetService.Get(id).ToJson();
+                return _meetService.GetDetail(id).ToJson();
             }
             catch (Exception ex)
             {
@@ -89,7 +91,7 @@ namespace AmberMeet.Controllers
         }
 
         [HttpPost]
-        public string PostMeet(MeetDetailDto dto)
+        public string PostMeet(MeetDto dto)
         {
             try
             {

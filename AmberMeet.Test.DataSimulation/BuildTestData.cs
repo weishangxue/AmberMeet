@@ -22,7 +22,7 @@ namespace AmberMeet.Test.DataSimulation
         {
             try
             {
-                FictitiouUsersButton.Text = "正在建立测试用户......";
+                FictitiouUsersButton.Text = @"正在建立测试用户......";
                 FictitiouUsersButton.Enabled = false;
                 ControlBox = false;
                 foreach (var testUser in _appDataBuilder.BuildTestUsers())
@@ -38,7 +38,7 @@ namespace AmberMeet.Test.DataSimulation
             }
             finally
             {
-                FictitiouUsersButton.Text = "虚构用户";
+                FictitiouUsersButton.Text = @"虚构用户";
                 FictitiouUsersButton.Enabled = true;
                 ControlBox = true;
             }

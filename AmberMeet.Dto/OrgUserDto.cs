@@ -5,16 +5,25 @@ using AmberMeet.Infrastructure.Utilities;
 
 namespace AmberMeet.Dto
 {
-    public class OrgUserPagedDto
+    /// <summary>
+    ///     用户详细
+    /// </summary>
+    public class OrgUserDto
     {
         public string Id { get; set; }
-        public string LoginName { get; set; }
+        public int IdentityId { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
+        public string LoginName { get; set; }
+        public string Password { get; set; }
         public string Mail { get; set; }
         public string Mobile { get; set; }
         public int Sex { get; set; }
         public DateTime? Birthday { get; set; }
         public int Role { get; set; }
+        public int Status { get; set; }
+        public DateTime CreateTime { get; set; }
+        public DateTime ModifiedTime { get; set; }
 
         /***Extension*****************************************************************************/
         public string SexText

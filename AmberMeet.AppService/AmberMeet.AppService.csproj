@@ -60,7 +60,10 @@
     <Compile Include="Base\ServiceModule.cs" />
     <Compile Include="FileMaps\FileMapService.cs" />
     <Compile Include="FileMaps\IFileMapService.cs" />
+    <Compile Include="MeetSignfors\IMeetSignforService.cs" />
+    <Compile Include="MeetSignfors\MeetSignforService.cs" />
     <Compile Include="Meets\IMeetService.cs" />
+    <Compile Include="Meets\MeetQueryService.cs" />
     <Compile Include="Meets\MeetService.cs" />
     <Compile Include="Organizations\IOrgUserService.cs" />
     <Compile Include="Organizations\OrgUserService.cs" />

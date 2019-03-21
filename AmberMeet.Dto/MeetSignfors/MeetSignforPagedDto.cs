@@ -1,14 +1,19 @@
 ﻿using System;
 using AmberMeet.Infrastructure.Utilities;
 
-namespace AmberMeet.Dto
+namespace AmberMeet.Dto.MeetSignfors
 {
-    public class MeetPagedDto
+    public class MeetSignforPagedDto
     {
         /// <summary>
         ///     主键ID
         /// </summary>
         public string Id { get; set; }
+
+        /// <summary>
+        ///     会议ID
+        /// </summary>
+        public string MeetId { get; set; }
 
         public string Subject { get; set; }
         public string Place { get; set; }

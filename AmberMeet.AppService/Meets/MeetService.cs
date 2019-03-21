@@ -1,76 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Linq;
 using System.Linq;
 using AmberMeet.Domain.Data;
 using AmberMeet.Domain.Meets;
 using AmberMeet.Domain.MeetSignfors;
-using AmberMeet.Domain.Organizations;
-using AmberMeet.Dto;
+using AmberMeet.Dto.Meets;
 using AmberMeet.Infrastructure.Exceptions;
-using AmberMeet.Infrastructure.Search;
 using AmberMeet.Infrastructure.Search.Paging;
-using AmberMeet.Infrastructure.Search.Sort;
 using AmberMeet.Infrastructure.Utilities;
 
 namespace AmberMeet.AppService.Meets
 {
     internal class MeetService : IMeetService
     {
-        private readonly IOrgUserRepository _orgUserRepository;
+        private readonly MeetQueryService _meetQueryService;
         private readonly IMeetRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
 
         public MeetService(
             IMeetRepository repository,
-            IOrgUserRepository orgUserRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            MeetQueryService meetQueryService)
         {
             _repository = repository;
-            _orgUserRepository = orgUserRepository;
             _unitOfWork = unitOfWork;
+            _meetQueryService = meetQueryService;
         }
 
-        public MeetDetailDto Get(string meetId)
+        public MeetDto GetDetail(string meetId)
         {
-            var meet = _repository.Find(meetId);
-            var orgUsers = _orgUserRepository.FindAll();
-            var meetDetail = new MeetDetailDto
-            {
-                Id = meet.Id,
-                OwnerId = meet.OwnerId,
-                Subject = meet.Subject,
-                Body = meet.Body,
-                StartTime = meet.StartTime,
-                EndTime = meet.EndTime,
-                Place = meet.Place,
-                NeedFeedback = meet.NeedFeedback,
-                State = meet.Status
-            };
-            //meetOwner设置
-            var meetOwner = orgUsers.FirstOrDefault(i => i.Id == meet.OwnerId);
-            if (meetOwner != null)
-            {
-                meetDetail.OwnerName = meetOwner.Name;
-            }
-            //MeetSignfors设置
-            IList<KeyValueDto> signors = new List<KeyValueDto>();
-            foreach (var signor in meet.MeetSignfors)
-            {
-                var signorUser = orgUsers.FirstOrDefault(i => i.Id == signor.SignorId);
-                if (signorUser == null)
-                {
-                    continue;
-                }
-                signors.Add(new KeyValueDto
-                {
-                    Key = signorUser.Id,
-                    Value = signorUser.Name
-                });
-            }
-            meetDetail.Signors = signors;
-
-            return meetDetail;
+            return _meetQueryService.GetDetail(meetId);
         }
 
         public int GetMyDistributeCount(string ownerId)
@@ -78,47 +37,19 @@ namespace AmberMeet.AppService.Meets
             return _repository.FindCount(MeetState.WaitActivate, ownerId);
         }
 
-        public PagedResult<MeetPagedDto> GetMyDistributeList(
-            int pageIndex, int pageSize, string keywords, string ownerId, MeetState? state, DateTime? activateDate)
+        public int GetMyActivateCount(string ownerId)
         {
-            var searchCriteria = new SearchCriteria<Meet>();
-            searchCriteria.AddFilterCriteria(t => t.OwnerId == ownerId);
-            if (state != null)
-            {
-                searchCriteria.AddFilterCriteria(t => t.Status == (int) state);
-            }
-            if (activateDate != null)
-            {
-                var activateDateVal = activateDate.Value.Date;
-                searchCriteria.AddFilterCriteria(t =>
-                    (t.MeetActivate == null && t.StartTime.Date == activateDateVal)
-                    || (t.MeetActivate != null && t.MeetActivate.StartTime.Date == activateDateVal));
-            }
-            if (!string.IsNullOrEmpty(keywords))
-            {
-                searchCriteria.AddFilterCriteria(
-                    t => t.Subject.Contains(keywords) ||
-                         t.Body.Contains(keywords) ||
-                         (t.MeetActivate == null && t.Place.Contains(keywords)) ||
-                         (t.MeetActivate != null && t.MeetActivate.Place.Contains(keywords)));
-            }
-            searchCriteria.AddSortCriteria(
-                new ExpressionSortCriteria<Meet, DateTime>(s => s.StartTime, SortDirection.Descending));
-            searchCriteria.PagingCriteria = new PagingCriteria(pageIndex, pageSize);
-            var pagedResult = _repository.FindPaged(searchCriteria);
-            var resultList = pagedResult.Entities.Select(i => new MeetPagedDto
-            {
-                Id = i.Id,
-                Subject = i.Subject,
-                Place = i.Place,
-                NeedFeedback = i.NeedFeedback,
-                StartTime = i.StartTime,
-                EndTime = i.EndTime
-            }).ToList();
-            return new PagedResult<MeetPagedDto>(pagedResult.Count, resultList);
+            return _repository.FindCount(MeetState.Activate, ownerId);
         }
 
-        public string AddMeet(MeetDetailDto dto)
+        public PagedResult<MeetPagedDto> GetMyDistributes(
+            int pageIndex, int pageSize, string keywords, string ownerId, DateTime? activateDate)
+        {
+            return _meetQueryService.GetPaged(
+                pageIndex, pageSize, keywords, ownerId, MeetState.WaitActivate, activateDate);
+        }
+
+        public string AddMeet(MeetDto dto)
         {
             //add meet
             var meet = new Meet();
@@ -157,7 +88,7 @@ namespace AmberMeet.AppService.Meets
             return dto.Id;
         }
 
-        public void ChangeMeet(MeetDetailDto dto)
+        public void ChangeMeet(MeetDto dto)
         {
             if (string.IsNullOrEmpty(dto.Id))
             {
@@ -197,6 +128,14 @@ namespace AmberMeet.AppService.Meets
             meet.MeetSignfors.AddRange(signors);
 
             _unitOfWork.Commit();
+        }
+
+        public PagedResult<MeetPagedDto> GetMyWaitSignfors(int pageIndex, int pageSize, string keywords, string ownerId,
+            DateTime? activateDate)
+        {
+            //todo
+            return _meetQueryService.GetPaged(
+                pageIndex, pageSize, keywords, ownerId, MeetState.WaitActivate, activateDate);
         }
     }
 }

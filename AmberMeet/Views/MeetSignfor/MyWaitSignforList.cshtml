@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "我的会议";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="input-group" style="margin-bottom: 3px;">
+    <div class="input-control has-icon-left has-icon-right">
+        <input id="searchText" class="form-control" type="search" placeholder="关键字" style="width: 90%">
+        <label for="searchText" class="input-control-icon-left search-icon">
+            <i class="icon icon-search"></i>
+        </label>
+        <input type="text" id="activateDate" name="activateDate" class="form-control" placeholder="开会日期" style="width: 10%"/>
+    </div>
+    <span class="input-group-btn">
+        <button type="button" id="searchButton" class="btn btn-primary">搜索</button>
+    </span>
+</div>
+<div class="jqGrid_wrapper">
+    <table id="waitSignforList"></table>
+    <div id="waitSignforListPager"></div>
+</div>
+<script src="~/Views/MeetSignfor/MyWaitSignforList.js"></script>

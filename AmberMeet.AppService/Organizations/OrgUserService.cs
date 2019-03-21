@@ -9,6 +9,7 @@ using AmberMeet.Infrastructure.Search;
 using AmberMeet.Infrastructure.Search.Paging;
 using AmberMeet.Infrastructure.Search.Sort;
 using AmberMeet.Infrastructure.Utilities;
+using AutoMapper;
 
 namespace AmberMeet.AppService.Organizations
 {
@@ -21,14 +22,16 @@ namespace AmberMeet.AppService.Organizations
             _repository = repository;
         }
 
-        public OrgUser Get(string userId)
+        public OrgUserDto Get(string userId)
         {
-            return _repository.Find(userId);
+            var user = _repository.Find(userId);
+            return Mapper.Map<OrgUserDto>(user);
         }
 
-        public OrgUser GetByAccount(string loginName)
+        public OrgUserDto GetByAccount(string loginName)
         {
-            return _repository.FindByAccount(loginName);
+            var user = _repository.FindByAccount(loginName);
+            return Mapper.Map<OrgUserDto>(user);
         }
 
         public bool AnyCode(string code, string excludedId)
@@ -71,33 +74,13 @@ namespace AmberMeet.AppService.Organizations
                 new ExpressionSortCriteria<OrgUser, DateTime>(s => s.CreateTime, SortDirection.Descending));
             searchCriteria.PagingCriteria = new PagingCriteria(pageIndex, pageSize);
             var pagedResult = _repository.FindPaged(searchCriteria);
-            var resultList = pagedResult.Entities.Select(i => new OrgUserPagedDto
-            {
-                Id = i.Id,
-                LoginName = i.Account,
-                Name = i.Name,
-                Mail = i.Mail,
-                Mobile = i.Mobile,
-                Sex = i.Sex,
-                Birthday = i.Birthday,
-                Role = i.Role
-            }).ToList();
+            var resultList = pagedResult.Entities.Select(i => Mapper.Map<OrgUserPagedDto>(i)).ToList();
             return new PagedResult<OrgUserPagedDto>(pagedResult.Count, resultList);
         }
 
         public IList<OrgUserPagedDto> GetAll()
         {
-            return _repository.FindAll().Select(i => new OrgUserPagedDto
-            {
-                Id = i.Id,
-                LoginName = i.Account,
-                Name = i.Name,
-                Mail = i.Mail,
-                Mobile = i.Mobile,
-                Sex = i.Sex,
-                Birthday = i.Birthday,
-                Role = i.Role
-            }).ToList();
+            return _repository.FindAll().Select(i => Mapper.Map<OrgUserPagedDto>(i)).ToList();
         }
 
         public string AddUser(OrgUser dto)
@@ -154,6 +137,15 @@ namespace AmberMeet.AppService.Organizations
             }
             password = CryptographicHelper.Hash(password);
             _repository.ModifyPassword(id, password);
+        }
+
+        public void ChangeUserRole(string id, UserRole role)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ArgumentNullException(ExMessage.MustNotBeNullOrEmpty(nameof(id)));
+            }
+            _repository.ModifyRole(id, role);
         }
 
         public void CancleUser(string id)

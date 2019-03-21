@@ -1,21 +1,22 @@
 ﻿using System;
-using AmberMeet.Domain.Meets;
-using AmberMeet.Dto;
+using AmberMeet.Dto.Meets;
 using AmberMeet.Infrastructure.Search.Paging;
 
 namespace AmberMeet.AppService.Meets
 {
     public interface IMeetService
     {
-        MeetDetailDto Get(string meetId);
+        MeetDto GetDetail(string meetId);
 
         int GetMyDistributeCount(string ownerId);
 
-        PagedResult<MeetPagedDto> GetMyDistributeList(
-            int pageIndex, int pageSize, string keywords, string ownerId, MeetState? state, DateTime? activateDate);
+        int GetMyActivateCount(string ownerId);
 
-        string AddMeet(MeetDetailDto dto);
+        PagedResult<MeetPagedDto> GetMyDistributes(
+            int pageIndex, int pageSize, string keywords, string ownerId, DateTime? activateDate);
 
-        void ChangeMeet(MeetDetailDto dto);
+        string AddMeet(MeetDto dto);
+
+        void ChangeMeet(MeetDto dto);
     }
 }

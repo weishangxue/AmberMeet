@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AmberMeet.Domain.Data;
+using AmberMeet.Domain.Organizations;
 using AmberMeet.Dto;
 using AmberMeet.Infrastructure.Search.Paging;
 
@@ -7,9 +8,9 @@ namespace AmberMeet.AppService.Organizations
 {
     public interface IOrgUserService
     {
-        OrgUser Get(string userId);
+        OrgUserDto Get(string userId);
 
-        OrgUser GetByAccount(string loginName);
+        OrgUserDto GetByAccount(string loginName);
 
         bool AnyCode(string code, string excludedId);
 
@@ -29,6 +30,8 @@ namespace AmberMeet.AppService.Organizations
         /// <param name="id">用户ID</param>
         /// <param name="password">明文密码</param>
         void ChangeUserPassword(string id, string password);
+
+        void ChangeUserRole(string id, UserRole role);
 
         void CancleUser(string id);
 

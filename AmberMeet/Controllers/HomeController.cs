@@ -32,13 +32,17 @@ namespace AmberMeet.Controllers
             return View();
         }
 
-        public ActionResult UserProfile()
+        public ActionResult UserProfile(string userId)
         {
             try
             {
                 if (!IsValidAccount())
                     return ErrorLoginView();
-                var user = _orgUserService.Get(SessionUserId);
+                if (userId == null)
+                {
+                    userId = SessionUserId;
+                }
+                var user = _orgUserService.Get(userId);
                 ViewBag.Status = ((UserState) user.Status).ToEnumText();
                 ViewBag.Sex = ((UserSex) user.Sex).ToEnumText();
                 return View(user);
@@ -93,8 +97,8 @@ namespace AmberMeet.Controllers
         {
             try
             {
-                //暂时直接使用admin进行测试
-                var user = _orgUserService.GetByAccount("admin");
+                //暂时直接使用test01进行测试
+                var user = _orgUserService.GetByAccount("test01");
                 SessionUserId = user.Id;
                 SessionUserRealName = user.Name;
                 return Ok();

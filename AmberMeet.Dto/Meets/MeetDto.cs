@@ -1,33 +1,33 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using AmberMeet.Domain.Meets;
 using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
 
-namespace AmberMeet.Dto
+namespace AmberMeet.Dto.Meets
 {
     /// <summary>
-    ///     ä¼šè®®è¯¦ç»†-(æ¶‰åŠå‰ç«¯js ajaxå¯¹è±¡æ˜ å°„)
+    ///     »áÒéÏêÏ¸-(Éæ¼°Ç°¶Ëjs ajax¶ÔÏóÓ³Éä)
     /// </summary>
-    public class MeetDetailDto
+    public class MeetDto
     {
         /// <summary>
-        ///     ä¸»é”®ID
+        ///     Ö÷¼üID
         /// </summary>
         public string Id { get; set; }
 
         /// <summary>
-        ///     å‘èµ·äººID
+        ///     ·¢ÆğÈËID
         /// </summary>
         public string OwnerId { get; set; }
 
         /// <summary>
-        ///     å‘èµ·äººå§“å
+        ///     ·¢ÆğÈËĞÕÃû
         /// </summary>
         public string OwnerName { get; set; }
 
         /// <summary>
-        ///     ä¼šè®®çŠ¶æ€
+        ///     »áÒé×´Ì¬
         /// </summary>
         public int State { get; set; }
 

@@ -46,8 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="KeyValueDto.cs" />
-    <Compile Include="MeetDetailDto.cs" />
-    <Compile Include="MeetPagedDto.cs" />
+    <Compile Include="MeetSignfors\MeetSignforPagedDto.cs" />
+    <Compile Include="Meets\MeetDto.cs" />
+    <Compile Include="Meets\MeetPagedDto.cs" />
+    <Compile Include="OrgUserDto.cs" />
     <Compile Include="OrgUserPagedDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -57,5 +59,6 @@
       <Name>AmberMeet.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
