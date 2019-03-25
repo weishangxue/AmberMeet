@@ -98,7 +98,7 @@ namespace AmberMeet.Controllers
             try
             {
                 //暂时直接使用test01进行测试
-                var user = _orgUserService.GetByAccount("test01");
+                var user = _orgUserService.GetByAccount("test0001");
                 SessionUserId = user.Id;
                 SessionUserRealName = user.Name;
                 return Ok();

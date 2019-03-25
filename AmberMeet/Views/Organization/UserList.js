@@ -39,7 +39,6 @@
                 var itemId = $(this).attr("itemId");
                 $.getJSON("GetUser?userId=" + itemId,
                     function(result) {
-                        debugger;
                         angel.userRoleChangeControl.show(result, reloadGrid);
                     });
             });

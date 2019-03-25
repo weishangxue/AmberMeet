@@ -1,0 +1,79 @@
+﻿@model AmberMeet.Dto.Meets.MeetDto
+@{
+    ViewBag.Title = "会议信息";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>主题</label>
+                <span class="form-control">@Model.Subject</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>内容</label>
+                <textarea class="form-control">@Model.Body</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>开始时间</label>
+                <span class="form-control">@Model.StartTimeStr</span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>结束时间</label>
+                <span class="form-control">@Model.EndTimeStr</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>地点(会议室)</label>
+                <span class="form-control">@Model.Place</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>需要反馈</label>
+                <span class="form-control">@Model.NeedFeedbackStr</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>参与者</label>
+            <div class="form-group form-control">
+                @{
+                    foreach (var signorName in Model.SignorNames)
+                    {
+                        <span class="label">@signorName &nbsp;</span>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-5 col-sm-3">
+            <button class="btn" id="closeButton">关闭</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.contact').css('width', '80%');
+        $('#closeButton').click(function() {
+            window.close();
+        });
+    });
+</script>

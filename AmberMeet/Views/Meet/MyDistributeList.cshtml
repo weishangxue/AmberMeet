@@ -2,6 +2,14 @@
     ViewBag.Title = "我的会议";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{ Html.RenderPartial("../Organization/UserSelectControl"); }
+<form id="mainForm">
+    @{ Html.RenderPartial("MyDistributeDetail"); }
+    @{ Html.RenderPartial("ActivateMeet"); }
+</form>
+<script src="~/Views/Meet/MyDistributeDetail.js"></script>
+<script src="~/Views/Meet/ActivateMeet.js"></script>
+
 <div class="input-group" style="margin-bottom: 3px;">
     <div class="input-control has-icon-left has-icon-right">
         <input id="searchText" class="form-control" type="search" placeholder="关键字" style="width: 90%">
@@ -19,9 +27,4 @@
     <table id="meetList"></table>
     <div id="meetListPager"></div>
 </div>
-@{ Html.RenderPartial("../Organization/UserSelectControl"); }
-<form id="mainForm">
-    @{ Html.RenderPartial("MyDistributeDetail"); }
-</form>
-<script src="~/Views/Meet/MyDistributeDetail.js"></script>
 <script src="~/Views/Meet/MyDistributeList.js"></script>

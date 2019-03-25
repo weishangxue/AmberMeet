@@ -18,5 +18,7 @@ namespace AmberMeet.AppService.Meets
         string AddMeet(MeetDto dto);
 
         void ChangeMeet(MeetDto dto);
+
+        void ActivateMeet(string meetId, DateTime startTime, DateTime? endTime, string place);
     }
 }

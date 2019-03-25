@@ -1,0 +1,58 @@
+﻿<div id="activateMeetContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="activateMeetModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 360px;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+            </button>
+            <h4 class="modal-title">会议激活</h4>
+        </div>
+        <div class="modal-body" style="padding-top: 3px;">
+            <div id="activateMeetErrorContainer" class="error"></div>
+            <div class="row col-md-11 form-group">
+                <label for="activate_subject">会议主题</label>
+                <input id="activate_subject" name="activate_subject" class="form-control" readonly="readonly"/>
+            </div>
+            <div class="row col-md-11 form-group" style="margin-bottom: 0;">
+                <label for="activate_startDate">开始时间</label>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-5">
+                    <input id="activate_startDate" name="activate_startDate" class="form-control" placeholder="开始时间"/>
+                </div>
+                <div class="col-md-3">
+                    <select id="activate_startHour" name="activate_startHour" class="form-control"></select>
+                </div>
+                <div class="col-md-3">
+                    <select id="activate_startMinute" name="activate_startMinute" class="form-control"></select>
+                </div>
+            </div>
+            <div class="row col-md-11 form-group" style="margin-bottom: 0;">
+                <label for="activate_endDate">结束时间</label>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-5">
+                    <input id="activate_endDate" name="activate_endDate" class="form-control" placeholder="开始时间"/>
+                </div>
+                <div class="col-md-3">
+                    <select id="activate_endHour" name="activate_endHour" class="form-control"></select>
+                </div>
+                <div class="col-md-3">
+                    <select id="activate_endMinute" name="activate_endMinute" class="form-control"></select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-11">
+                        <label for="activate_place">地点(会议室)</label>
+                        <input id="activate_place" name="activate_place" class="form-control" placeholder="会议地点"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-default" id="activateMeetCancelButton">取消</a>
+            <a class="btn btn-primary" id="activateMeetSubmitButton">确认</a>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="activate_meetId" name="activateMeetId"/>

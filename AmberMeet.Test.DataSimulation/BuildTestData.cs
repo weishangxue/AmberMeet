@@ -25,7 +25,8 @@ namespace AmberMeet.Test.DataSimulation
                 FictitiouUsersButton.Text = @"正在建立测试用户......";
                 FictitiouUsersButton.Enabled = false;
                 ControlBox = false;
-                foreach (var testUser in _appDataBuilder.BuildTestUsers())
+                var testUsers = _appDataBuilder.BuildTestUsers();
+                foreach (var testUser in testUsers)
                 {
                     ServiceFactory.OrgUserService.AddUser(testUser);
                 }

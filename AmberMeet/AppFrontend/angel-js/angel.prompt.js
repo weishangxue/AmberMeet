@@ -35,7 +35,7 @@ angel.prompt = (function($) {
     var $dialog;
     var $message;
     var $okButton;
-    //var $title;
+    var $title;
 
     var okHandler = function() {};
 
@@ -45,7 +45,7 @@ angel.prompt = (function($) {
         $dialog = $("#" + ids.dialog);
         $message = $("#" + ids.message);
         $okButton = $("#" + ids.okButton);
-        //$title = $("#" + ids.title);
+        $title = $("#" + ids.title);
 
         $okButton.click(function() {
             $dialog.modal("hide");
@@ -56,12 +56,16 @@ angel.prompt = (function($) {
         //$dialog.on("hide.bs.modal", function () { okHandler(); });
     };
 
-    that.show = function(message, closeHandler) {
+    that.show = function(message, closeHandler, title) {
         $message.text(message);
 
         if ($.isFunction(closeHandler)) {
             okHandler = closeHandler;
         }
+        if (!title) {
+            title = "提示";
+        }
+        $title.text(title);
 
         $dialog.modal({ backdrop: "static", keyboard: false });
         $dialog.modal("show");
@@ -75,11 +79,11 @@ angel.prompt = (function($) {
     return that;
 })(jQuery);
 
-angel.alert = function(message, closeHandler) {
+angel.alert = function(message, closeHandler, title) {
     $(".close", $("#modalf8810deee30544baaca953ed5c17a5fd")).show();
     $(".modal-dialog", $("#modalf8810deee30544baaca953ed5c17a5fd")).removeClass("modal-sm");
     $("#modalOkButtonf8810deee30544baaca953ed5c17a5fd").show();
-    angel.prompt.show(message, closeHandler);
+    angel.prompt.show(message, closeHandler, title);
 };
 
 angel.alertNonClose = function(message, closeHandler) {

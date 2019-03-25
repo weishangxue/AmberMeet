@@ -1,6 +1,7 @@
 ﻿using AmberMeet.Domain.Data;
 using AmberMeet.Dto;
 using AmberMeet.Dto.Meets;
+using AmberMeet.Dto.MeetSignfors;
 using AutoMapper;
 
 namespace AmberMeet.AppService.Base
@@ -13,16 +14,27 @@ namespace AmberMeet.AppService.Base
             Mapper.Initialize(cfg =>
             {
                 //org map
-                cfg.CreateMap<OrgUser, OrgUserPagedDto>()
-                    .ForMember(t => t.LoginName, opt => opt.MapFrom(s => s.Account));
                 cfg.CreateMap<OrgUser, OrgUserDto>()
                     .ForMember(t => t.LoginName, opt => opt.MapFrom(s => s.Account));
                 cfg.CreateMap<OrgUserDto, OrgUser>()
                     .ForMember(t => t.Account, opt => opt.MapFrom(s => s.LoginName));
+                cfg.CreateMap<OrgUser, OrgUserPagedDto>()
+                    .ForMember(t => t.LoginName, opt => opt.MapFrom(s => s.Account));
                 //meet map
                 cfg.CreateMap<Meet, MeetDto>()
                     .ForMember(t => t.State, opt => opt.MapFrom(s => s.Status));
+                cfg.CreateMap<MeetDto, Meet>()
+                    .ForMember(t => t.Status, opt => opt.MapFrom(s => s.State));
                 cfg.CreateMap<Meet, MeetPagedDto>();
+                //meet signfor map
+                cfg.CreateMap<MeetSignfor, MeetSignforDto>()
+                    .ForMember(t => t.State, opt => opt.MapFrom(s => s.Status))
+                    .ForMember(t => t.Subject, opt => opt.MapFrom(s => s.Meet.Subject))
+                    .ForMember(t => t.Body, opt => opt.MapFrom(s => s.Meet.Body))
+                    .ForMember(t => t.Place, opt => opt.MapFrom(s => s.Meet.Place))
+                    .ForMember(t => t.NeedFeedback, opt => opt.MapFrom(s => s.Meet.NeedFeedback))
+                    .ForMember(t => t.StartTime, opt => opt.MapFrom(s => s.Meet.StartTime))
+                    .ForMember(t => t.EndTime, opt => opt.MapFrom(s => s.Meet.EndTime));
             });
         }
     }

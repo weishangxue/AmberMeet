@@ -70,6 +70,24 @@
         return null;
     };
 
+    that.getDatetime = function(date, hour, minute) {
+        if (!date) {
+            return null;
+        }
+        if (!hour) {
+            hour = null;
+        }
+        if (!minute) {
+            minute = null;
+        }
+        var dateStrs = date.split("-");
+        var year = parseInt(dateStrs[0], 10);
+        var month = parseInt(dateStrs[1], 10) - 1;
+        var day = parseInt(dateStrs[2], 10);
+
+        return new Date(year, month, day, hour, minute);
+    };
+
     that.openWnd = function(url, width, height) {
         if (!width) {
             width = $(window).width() * 0.6;

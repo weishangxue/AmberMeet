@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="KeyValueDto.cs" />
+    <Compile Include="MeetSignfors\MeetSignforDto.cs" />
     <Compile Include="MeetSignfors\MeetSignforPagedDto.cs" />
     <Compile Include="Meets\MeetDto.cs" />
     <Compile Include="Meets\MeetPagedDto.cs" />

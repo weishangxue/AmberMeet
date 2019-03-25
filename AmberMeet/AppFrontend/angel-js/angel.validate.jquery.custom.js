@@ -92,4 +92,33 @@
         },
         "Please input a valid date range.");
 
+    $.validator.addMethod("isFutureTime",
+        function(value, element, param) {
+            if (this.optional(element)) {
+                return true;
+            }
+            if (!param[1].val() || !param[2].val()) {
+                return true;
+            }
+
+            var date = param[0].val().split("-");
+            var year = parseInt(date[0], 10);
+            var month = parseInt(date[1], 10) - 1;
+            var day = parseInt(date[2], 10);
+            var hour = null;
+            var minute = null;
+            if (param[1].val() && param[2].val()) {
+                hour = param[1].val(); //hour
+                minute = param[2].val(); //minute
+            }
+
+            var dateValue = new Date(year, month, day, hour, minute);
+            if (dateValue < new Date) {
+                return false;
+            }
+
+            return true;
+        },
+        "Please input a valid date range.");
+
 })(jQuery);

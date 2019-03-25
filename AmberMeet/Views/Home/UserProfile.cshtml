@@ -4,48 +4,46 @@
     ViewBag.Title = "用户信息";
     Layout = "_Layout.cshtml";
 }
-<input type="hidden" value="@Model.Id"/>
 <div id="orgUserContainer" class="form-horizontal"style="margin-top: 3px;">
-    <div id="orgUserErrorContainer" class="error"></div>
-    <div class="form-group">
+    <div class="row form-group">
         <label class="col-sm-1">登录名</label>
-        <div class="col-md-3 col-sm-5">
+        <div class="col-md-3 col-sm-3">
             <span class="form-control">@Model.LoginName</span>
         </div>
         <label class="col-sm-1">姓名</label>
-        <div class="col-md-3 col-sm-5">
+        <div class="col-md-3 col-sm-3">
             <span class="form-control">@Model.Name</span>
         </div>
         <label class="col-sm-1">性别</label>
-        <div class="col-md-3 col-sm-5">
+        <div class="col-md-3 col-sm-3">
             <span class="form-control">@ViewBag.Sex</span>
         </div>
     </div>
-    <div class="form-group">
+    <div class="row form-group">
         <label class="col-sm-1">邮箱</label>
-        <div class="col-md-3 col-sm-5">
+        <div class="col-md-3 col-sm-3">
             <span class="form-control">@Model.Mail</span>
         </div>
         <label class="col-sm-1">手机</label>
-        <div class="col-md-3 col-sm-5">
+        <div class="col-md-3 col-sm-3">
             <span class="form-control">@Model.Mobile</span>
         </div>
         <label class="col-sm-1">生日</label>
-        <div class="col-md-3 col-sm-5">
+        <div class="col-md-3 col-sm-3">
             <span class="form-control">@FormatHelper.GetIsoDateString(Model.Birthday)</span>
         </div>
     </div>
-    <div class="form-group">
+    <div class="row form-group">
         <label class="col-sm-1">编号</label>
-        <div class="col-md-3 col-sm-5">
+        <div class="col-md-3 col-sm-3">
             <span class="form-control">@Model.Code</span>
         </div>
         <label class="col-sm-1">状态</label>
-        <div class="col-md-3 col-sm-5">
+        <div class="col-md-3 col-sm-3">
             <span class="form-control">@ViewBag.Status</span>
         </div>
     </div>
-    <div class="form-group">
+    <div class="row form-group">
         <div class="col-sm-offset-5 col-sm-3">
             <button class="btn" id="closeButton">关闭</button>
         </div>
@@ -53,7 +51,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        $('.contact').css('width', '80%');
+        $('.contact').css('width', '90%');
         $('#closeButton').click(function() {
             window.close();
         });

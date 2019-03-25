@@ -233,8 +233,10 @@
     <Content Include="Views\Home\ChangePassword.js" />
     <Content Include="Views\Home\Login.js" />
     <Content Include="Views\MeetSignfor\MyWaitSignforList.js" />
+    <Content Include="Views\MeetSignfor\Signfor.js" />
     <Content Include="Views\Meet\MyDistributeList.js" />
     <Content Include="Views\Meet\MyDistributeDetail.js" />
+    <Content Include="Views\Meet\ActivateMeet.js" />
     <Content Include="Views\Organization\UserRoleChange.js" />
     <Content Include="Views\Organization\UserDetail.js" />
     <Content Include="Views\Organization\UserList.js" />
@@ -276,7 +278,6 @@
     <Content Include="Views\Shared\_LayoutNavigation.cshtml" />
     <Content Include="Views\Shared\_LayoutTreeMenu.cshtml" />
     <Content Include="Views\Test\CanvasTest.cshtml" />
-    <Content Include="Views\Test\FaceRecognitionApi.cshtml" />
     <Content Include="Views\Test\FileUploadTest.cshtml" />
     <Content Include="Views\Test\SynCardReaderTest.cshtml" />
     <Content Include="Views\UserControl\CanvasUpload.cshtml" />
@@ -296,6 +297,9 @@
     <Content Include="Views\Meet\Index.cshtml" />
     <Content Include="Views\MeetSignfor\MyWaitSignforList.cshtml" />
     <Content Include="Views\Organization\UserRoleChange.cshtml" />
+    <Content Include="Views\Meet\MeetDetail.cshtml" />
+    <Content Include="Views\MeetSignfor\Signfor.cshtml" />
+    <Content Include="Views\Meet\ActivateMeet.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

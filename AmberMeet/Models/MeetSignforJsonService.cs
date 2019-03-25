@@ -14,21 +14,29 @@ namespace AmberMeet.Models
             IList<JqGridRowObject> rows =
                 pagedResult.Entities.Select(item => new JqGridRowObject(item.Id, new[]
                 {
-                    GetSelectItem(item.Id, item.Subject),
+                    GetSelectItem(item.Id, item.Subject, item.MeetId),
                     item.Place,
                     item.StartTimeText,
                     item.EndTimeText,
-                    item.NeedFeedbackText
+                    item.NeedFeedbackText,
+                    GetSelectBtn(item.Id)
                 })).ToList();
             var jsonJqGridObject = new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
             return jsonJqGridObject.ToJson(true);
         }
 
-        private string GetSelectItem(string itemId, string itemName)
+        private string GetSelectItem(string itemId, string itemName, string meetId)
         {
             const string selectItem =
-                "<a name='selectItem' itemId='{itemId}' style='cursor: pointer'>{itemName}</a>";
-            return selectItem.Replace("{itemId}", itemId).Replace("{itemName}", itemName);
+                "<a name='selectItem' itemId='{itemId}' meetId='{meetId}' style='cursor: pointer'>{itemName}</a>";
+            return selectItem.Replace("{itemId}", itemId).Replace("{itemName}", itemName).Replace("{meetId}", meetId);
+        }
+
+        private string GetSelectBtn(string itemId)
+        {
+            const string selectBtn =
+                "<a name='signforBtn' itemId='{itemId}' style='cursor: pointer'>签收</a>";
+            return selectBtn.Replace("{itemId}", itemId);
         }
     }
 }

@@ -1,0 +1,30 @@
+﻿<div id="signforContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="signforModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 300px;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">×</span><span class="sr-only">关闭</span>
+            </button>
+            <h4 class="modal-title">确认签收</h4>
+        </div>
+        <div class="modal-body" style="padding-top: 3px;">
+            <div id="signforErrorContainer" class="error"></div>
+            <div class="row">
+                <div class="form-group col-md-11">
+                    <label for="subject">会议主题</label>
+                    <input id="subject" name="subject" class="form-control" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-11">
+                    <label for="feedback">意见</label>
+                    <textarea class="form-control" id="feedback" name="feedback" placeholder="意见"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-default" id="signforCancelButton">取消</a>
+            <a class="btn btn-primary" id="signforSubmitButton">确认</a>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="signforId" name="signforId"/>

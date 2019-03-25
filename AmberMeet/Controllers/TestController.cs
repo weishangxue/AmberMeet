@@ -7,7 +7,6 @@ namespace AmberMeet.Controllers
 {
     public class TestController : ControllerBase
     {
-        // GET: Test/Test
         public ActionResult CanvasTest()
         {
             return View();
@@ -19,11 +18,6 @@ namespace AmberMeet.Controllers
         }
 
         public ActionResult SynCardReaderTest()
-        {
-            return View();
-        }
-
-        public ActionResult FaceRecognitionApi()
         {
             return View();
         }

@@ -12,51 +12,65 @@
                 <div class="row">
                     <div class="col-md-5">
                         <div class="form-group">
-                            <label for="subject">主题</label>
-                            <input id="subject" name="subject" class="form-control" placeholder="主题"/>
+                            <label for="distribute_subject">主题</label>
+                            <input id="distribute_subject" name="distribute_subject" class="form-control" placeholder="主题"/>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-11">
                         <div class="form-group">
-                            <label for="body">内容</label>
-                            <textarea class="form-control" id="body" name="body" placeholder="内容"></textarea>
+                            <label for="distribute_body">内容</label>
+                            <textarea class="form-control" id="distribute_body" name="distribute_body" placeholder="内容"></textarea>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row col-md-11 form-group" style="margin-bottom: 0;">
+                    <label for="distribute_startDate">开始时间</label>
+                </div>
+                <div class="row form-group">
                     <div class="col-md-5">
-                        <div class="form-group">
-                            <label for="startTime">开始时间</label>
-                            <input id="startTime" name="startTime" class="form-control" placeholder="开始时间"/>
-                        </div>
+                        <input id="distribute_startDate" name="distribute_startDate" class="form-control" placeholder="开始时间"/>
                     </div>
-                    <div class="col-md-5" style="width: 46.7%">
+                    <div class="col-md-3">
+                        <select id="distribute_startHour" name="distribute_startHour" class="form-control"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="distribute_startMinute" name="distribute_startMinute" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="row col-md-11 form-group" style="margin-bottom: 0;">
+                    <label for="distribute_endDate">结束时间(预)</label>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-5">
+                        <input id="distribute_endDate" name="distribute_endDate" class="form-control" placeholder="开始时间"/>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="distribute_endHour" name="distribute_endHour" class="form-control"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="distribute_endMinute" name="distribute_endMinute" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-11">
                         <div class="form-group">
-                            <label for="endTime">结束时间(预)</label>
-                            <input id="endTime" name="endTime" class="form-control" placeholder="结束时间"/>
+                            <label for="distribute_place">地点(会议室)</label>
+                            <input id="distribute_place" name="distribute_place" class="form-control" placeholder="会议地点"/>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-11">
                         <div class="form-group">
-                            <label for="place">地点(会议室)</label>
-                            <input id="place" name="place" class="form-control" placeholder="会议地点"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-11">
-                        <div class="form-group">
-                            <label for="needFeedback">需要反馈</label>
+                            <label for="distribute_needFeedback">需要反馈</label>
                             <div>
                                 <label class="radio-inline">
-                                    <input type="radio" name="needFeedback" value="true" id="needFeedback"> 是
+                                    <input type="radio" name="distribute_needFeedback" value="true" id="distribute_needFeedback"> 是
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="needFeedback" value="false" id="needFeedbackNo"> 否
+                                    <input type="radio" name="distribute_needFeedback" value="false" id="distribute_needFeedbackNo"> 否
                                 </label>
                             </div>
                         </div>
@@ -65,14 +79,12 @@
                 <div class="row">
                     <div class="col-md-11">
                         <div class="form-group">
-                            <label for="signors" id="signorsLabel">参与者</label>
-                            <input type="hidden" id="signors" name="signors" value=""/>
-                            <a href="javacript:void(0);" id="addSignorButton">
+                            <label for="distribute_signors">参与者</label>
+                            <input type="hidden" id="distribute_signors" name="distribute_signors" value=""/>
+                            <a href="javacript:void(0);" id="distribute_addSignorButton">
                                 <i class="icon-plus"></i>
                             </a>
-                            <div id="signorNamesContainer">
-                                @*<span class="label" userid={userId}><i class="icon-user">{userName};</i></span>&nbsp;*@
-                            </div>
+                            <div id="distribute_signorNamesContainer"></div>
                         </div>
                     </div>
                 </div>

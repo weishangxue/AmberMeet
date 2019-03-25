@@ -3,9 +3,11 @@ using System.Linq;
 using AmberMeet.Domain.Data;
 using AmberMeet.Domain.MeetSignfors;
 using AmberMeet.Dto.MeetSignfors;
+using AmberMeet.Infrastructure.Exceptions;
 using AmberMeet.Infrastructure.Search;
 using AmberMeet.Infrastructure.Search.Paging;
 using AmberMeet.Infrastructure.Search.Sort;
+using AutoMapper;
 
 namespace AmberMeet.AppService.MeetSignfors
 {
@@ -18,6 +20,17 @@ namespace AmberMeet.AppService.MeetSignfors
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
+        }
+
+        public MeetSignforDto GetDetail(string signforId)
+        {
+            if (string.IsNullOrEmpty(signforId))
+            {
+                throw new ArgumentNullException(ExMessage.MustNotBeNullOrEmpty(nameof(signforId)));
+            }
+            //map
+            var signfor = _repository.Find(signforId);
+            return Mapper.Map<MeetSignforDto>(signfor);
         }
 
         public int GetMyWaitSignforCount(string signorId)
@@ -67,6 +80,23 @@ namespace AmberMeet.AppService.MeetSignfors
                 EndTime = i.Meet.EndTime
             }).ToList();
             return new PagedResult<MeetSignforPagedDto>(pagedResult.Count, resultList);
+        }
+
+        public void Signfor(string signforId, string feedback)
+        {
+            if (string.IsNullOrEmpty(signforId))
+            {
+                throw new ArgumentNullException(ExMessage.MustNotBeNullOrEmpty(nameof(signforId)));
+            }
+            var meetSignfor = _repository.First(signforId);
+            if (string.IsNullOrEmpty(feedback) && meetSignfor.Meet.NeedFeedback)
+            {
+                throw new ArgumentNullException(ExMessage.MustNotBeNullOrEmpty(nameof(feedback)));
+            }
+            meetSignfor.Feedback = feedback;
+            meetSignfor.SignTime = DateTime.Now;
+            meetSignfor.Status = (int) MeetSignorState.AlreadySigned;
+            _unitOfWork.Commit();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using AmberMeet.AppService.Meets;
 using AmberMeet.AppService.MeetSignfors;
 using AmberMeet.Dto.Meets;
+using AmberMeet.Infrastructure.Exceptions;
 using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
 using AmberMeet.Models;
@@ -43,6 +44,28 @@ namespace AmberMeet.Controllers
                 return ErrorLoginView();
             }
             return View();
+        }
+
+        public ActionResult MeetDetail(string meetId)
+        {
+            try
+            {
+                if (!IsValidAccount())
+                {
+                    return ErrorLoginView();
+                }
+                if (string.IsNullOrEmpty(meetId))
+                {
+                    throw new PreValidationException("会议ID不允许为空");
+                }
+                var meet = _meetService.GetDetail(meetId);
+                return View(meet);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ExceptionLog(ex);
+                return ErrorView(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -111,6 +134,42 @@ namespace AmberMeet.Controllers
                 {
                     _meetService.ChangeMeet(dto);
                 }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ExceptionLog(ex);
+                var result = HtmlHelper.Encode(ex.Message);
+                return Ok(false, result);
+            }
+        }
+
+        [HttpPost]
+        public string PutMeetActivate(MeetDto dto)
+        {
+            try
+            {
+                if (!IsValidAccount())
+                {
+                    return OkLoginError();
+                }
+                if (string.IsNullOrEmpty(dto.Id))
+                {
+                    throw new PreValidationException("会议ID不允许为空");
+                }
+                var meet = _meetService.GetDetail(dto.Id);
+                if (meet.OwnerId != SessionUserId)
+                {
+                    throw new PreValidationException("不允许会非议拥有者激活会议");
+                }
+
+                var startTime = dto.StartTime.Date.AddHours(dto.StartHour).AddMinutes(dto.StartMinute);
+                DateTime? endTime = null;
+                if (dto.EndTime != null && dto.EndHour != null && dto.EndMinute != null)
+                {
+                    endTime = dto.EndTime.Value.Date.AddHours(dto.EndHour.Value).AddMinutes(dto.EndMinute.Value);
+                }
+                _meetService.ActivateMeet(dto.Id, startTime, endTime, dto.Place);
                 return Ok();
             }
             catch (Exception ex)

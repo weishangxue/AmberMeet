@@ -8,25 +8,64 @@ angel.myDistributeDetailControl = (function($) {
     var $controlContainer = $("#myDistributeDetailContainer");
     var $controlErrorContainer = $("#myDistributeDetailErrorContainer");
 
-    var $subject = $("#subject");
-    var $body = $("#body");
-    var $startTime = $("#startTime");
+    var $subject = $("#distribute_subject");
+    var $body = $("#distribute_body");
+    var $startDate = $("#distribute_startDate");
+    var $startHour = $("#distribute_startHour");
+    var $startMinute = $("#distribute_startMinute");
+    var $endDate = $("#distribute_endDate");
+    var $endHour = $("#distribute_endHour");
+    var $endMinute = $("#distribute_endMinute");
+    var $place = $("#distribute_place");
+    var $needFeedback = $("#distribute_needFeedback");
+    var $needFeedbackNo = $("#distribute_needFeedbackNo");
 
-    var $endTime = $("#endTime");
-    var $place = $("#place");
-    var $needFeedback = $("#needFeedback");
-    var $needFeedbackNo = $("#needFeedbackNo");
-
-    //var $signorsLabel = $("#signorsLabel");
-    var $signors = $("#signors");
-    var $signorNamesContainer = $("#signorNamesContainer");
-    var $addSignorButton = $("#addSignorButton");
+    var $signors = $("#distribute_signors");
+    var $signorNamesContainer = $("#distribute_signorNamesContainer");
+    var $addSignorButton = $("#distribute_addSignorButton");
 
     var $submitButton = $("#myDistributeDetailSubmitButton");
     var $cancelButton = $("#myDistributeDetailCancelButton");
 
     var submitButtonHandler = function() {};
     var cancelButtonHandler = function() {};
+
+    var initElements = function() {
+        $startDate.addDatepicker(function(ev) {
+            $endDate.setDatepickerStartDate(ev.date);
+            $(this).blur();
+        });
+
+        $endDate.addDatepicker(function(ev) {
+            $startDate.setDatepickerEndDate(ev.date);
+            $(this).blur();
+        });
+        //小时初始化
+        $startHour.empty();
+        $endHour.empty();
+        var hourSelects = "";
+        for (var ihour = 0; ihour < 24; ihour++) {
+            var hourSelect = '<option value="{hour}">{hourText}</option>';
+            hourSelect = hourSelect.replace("{hour}", ihour).replace("{hourText}", ihour + "点");
+            hourSelects = hourSelects + hourSelect;
+        }
+        $startHour.html(hourSelects).val(10);
+        $endHour.html(hourSelects).val(10);
+        //分钟初始化
+        $startMinute.empty();
+        $endMinute.empty();
+        var minuteSelects = "";
+        for (var iminute = 0; iminute < 61; iminute++) {
+            if (iminute != 0 && iminute % 5 != 0) {
+                continue;
+            }
+            var minuteSelect = '<option value="{minute}">{minuteText}</option>';
+            minuteSelect = minuteSelect.replace("{minute}", iminute).replace("{minuteText}", iminute + "分");
+            minuteSelects = minuteSelects + minuteSelect;
+        }
+        $startMinute.html(minuteSelects);
+        $endMinute.html(minuteSelects);
+    };
 
     var initSignorsHtml = function() {
         _signorsHtml = "";
@@ -37,7 +76,7 @@ angel.myDistributeDetailControl = (function($) {
             var userName = signor.Value;
             //_signorsHtml处理
             var newSignorHtml =
-                '<span class="label">{userName} <a name="signorItem" userid={userId} username={userName} href="#" class="label label-badge">X</a></span>&nbsp;';
+                '<span class="label">{userName} <a name="signorItem" userid={userId} username={userName} href="javacript:void(0);" class="label label-badge">X</a></span>&nbsp;';
             newSignorHtml = newSignorHtml.replace("{userId}", userId)
                 .replace("{userName}", userName).replace("{userName}", userName);
             _signorsHtml = _signorsHtml + newSignorHtml;
@@ -54,7 +93,6 @@ angel.myDistributeDetailControl = (function($) {
         for (var isignor = 0; isignor < _signors.length; isignor++) {
             var signor = _signors[isignor];
             if (signor.Key == userId) {
-                //angel.alert(userName + "已存在");
                 return;
             }
         }
@@ -101,9 +139,13 @@ angel.myDistributeDetailControl = (function($) {
                 Body: $body.val(),
                 Place: $place.val(),
                 NeedFeedback: needFeedback,
-                StartTime: $startTime.val(),
-                EndTime: $endTime.val(),
-                Signors: _signors //签收人发生改变时直接改变
+                StartTime: $startDate.val(),
+                StartHour: $startHour.val(),
+                StartMinute: $startMinute.val(),
+                EndTime: $endDate.val(),
+                EndHour: $endHour.val(),
+                EndMinute: $endMinute.val(),
+                Signors: _signors
             };
             if (_meet != null) {
                 newMeet.Id = _meet.Id;
@@ -135,16 +177,6 @@ angel.myDistributeDetailControl = (function($) {
             cancelButtonHandler();
         });
 
-        $startTime.addDatepicker(function(ev) {
-            $endTime.setDatepickerStartDate(ev.date);
-            $(this).blur();
-        });
-
-        $endTime.addDatepicker(function(ev) {
-            $startTime.setDatepickerEndDate(ev.date);
-            $(this).blur();
-        });
-
         $addSignorButton.click(function() {
             angel.userSelectControl.show(function(selectItem) {
                 addSignor(selectItem.userId, selectItem.userName);
@@ -153,36 +185,44 @@ angel.myDistributeDetailControl = (function($) {
 
         $subject.rules("add", { required: true, messages: { required: "主题不允许为空" } });
         $body.rules("add", { required: true, messages: { required: "内容不允许为空" } });
-        $startTime.rules("add",
+        $startDate.rules("add",
             {
                 required: true,
                 dateISO: true,
-                compareDateFromTo: [$startTime, $endTime],
+                isFutureTime: [$startDate, $startHour, $startMinute],
+                compareDateFromTo: [$startDate, $endDate],
                 messages: {
-                    required: "开始时间不允许为空",
-                    dateISO: "开始时间必需为日期格式(ISO)。例:2018-03-02",
-                    compareDateFromTo: "开始时间必需小于结束时间"
+                    required: "开始日期不允许为空",
+                    dateISO: "开始日期必需为日期格式(ISO)。例:2018-03-02",
+                    isFutureTime: "开始时间不允许小于当前时间",
+                    compareDateFromTo: "开始日期不允许大于结束日期"
                 }
             });
-        $endTime.rules("add",
+        $startHour.rules("add", { required: true, messages: { required: "开始时间必须选择" } });
+        $startMinute.rules("add", { required: true, messages: { required: "开始分钟必须选择" } });
+        $endDate.rules("add",
             {
                 dateISO: true,
-                compareDateFromTo: [$startTime, $endTime],
+                compareDateFromTo: [$startDate, $endDate],
                 messages: {
-                    dateISO: "结束时间必需为日期格式(ISO)。例:2018-03-02",
-                    compareDateFromTo: "开始时间必需小于结束时间"
+                    dateISO: "结束日期必需为日期格式(ISO)。例:2018-03-02",
+                    compareDateFromTo: "开始日期不允许大于结束日期"
                 }
             });
+        //$endHour.rules("add", { required: true, messages: { required: "结束时间必须选择" } });
+        //$endMinute.rules("add", { required: true, messages: { required: "结束分钟必须选择" } });
         $place.rules("add", { required: true, messages: { required: "会议地点不允许为空" } });
         $needFeedback.rules("add", { required: true, messages: { required: "是否需要反馈必须选择" } });
         $signors.rules("add", { required: true, messages: { required: "参与人不允许为空" } });
 
         angel.addRequiredMark($subject);
         angel.addRequiredMark($body);
-        angel.addRequiredMark($startTime);
+        angel.addRequiredMark($startDate);
         angel.addRequiredMark($place);
         angel.addRequiredMark($needFeedback);
         angel.addRequiredMark($signors);
+
+        initElements();
     };
 
     that.show = function(dto, confirmHandler, cancelHandler) {
@@ -196,14 +236,17 @@ angel.myDistributeDetailControl = (function($) {
 
         _signorsHtml = "";
         if (dto) {
-            debugger;
             _meet = dto;
             _signors = dto.Signors;
 
             $subject.val(_meet.Subject);
             $body.val(_meet.Body);
-            $startTime.val(_meet.StartTimeStr);
-            $endTime.val(_meet.EndTimeStr);
+            $startDate.val(_meet.StartDateStr);
+            $startHour.val(_meet.StartHour);
+            $startMinute.val(_meet.StartMinute);
+            $endDate.val(_meet.EndDateStr);
+            $endHour.val(_meet.endHour);
+            $endMinute.val(_meet.endMinute);
             $place.val(_meet.Place);
             if (!_meet.NeedFeedback) {
                 $needFeedbackNo.prop("checked", "checked");
@@ -216,8 +259,12 @@ angel.myDistributeDetailControl = (function($) {
 
             $subject.val("");
             $body.val("");
-            $startTime.val("");
-            $endTime.val("");
+            $startDate.val("");
+            $startHour.val("");
+            $startMinute.val("");
+            $endDate.val("");
+            $endHour.val("");
+            $endMinute.val("");
             $place.val("");
             $needFeedback.val("");
         }

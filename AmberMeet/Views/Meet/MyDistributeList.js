@@ -20,27 +20,48 @@
         }
     };
     var initializeGrid = function() {
-        var colNames = ["主题", "会议室", "开始时间", "结束时间", "需要反馈", "选择"];
+        var colNames = ["主题", "会议室", "开始时间", "结束时间", "需要反馈", "未签收", "已签收", "选择"];
         var colModel = [
             { name: "subject", index: "subject", width: 130, sortable: false },
             { name: "room", index: "room", width: 80, sortable: false },
-            { name: "startTime", index: "startTime", width: 60, sortable: false },
-            { name: "endTime", index: "endTime", width: 60, sortable: false },
+            { name: "startTime", index: "startTime", width: 100, sortable: false },
+            { name: "endTime", index: "endTime", width: 100, sortable: false },
             { name: "needFeedback", index: "needFeedback", width: 50, sortable: false },
+            { name: "waitSignforCount", index: "waitSignforCount", width: 50, sortable: false },
+            { name: "alreadySignCoun", index: "alreadySignCoun", width: 50, sortable: false },
             { name: "selectBtn", index: "selectBtn", width: 50, sortable: false }
         ];
         var url = gridUrl();
         angel.jqGrid.setGridUrl(url);
         angel.jqGrid.setGridSortorder("");
         angel.jqGrid.setGridCompleteHandler(function() {
-            //$('a[name="selectItem"]', $grid).click(function() {
-            //    window.location.href = "UserDetail?id=" + $(this).attr("itemId");
-            //});
+            $('a[name="selectItem"]', $grid).click(function() {
+                angel.openWnd("../Meet/MeetDetail?meetId=" + $(this).attr("itemId"), 993, 530);
+            });
+            $('a[name="waitSignforCountLabel"]', $grid).click(function() {
+                var namesStr = $(this).attr("namesStr");
+                if (namesStr) {
+                    angel.alert($(this).attr("namesStr"), null, "未签收的人");
+                }
+            });
+            $('a[name="alreadySignCountLabel"]', $grid).click(function() {
+                var namesStr = $(this).attr("namesStr");
+                if (namesStr) {
+                    angel.alert($(this).attr("namesStr"), null, "已签收的人");
+                }
+            });
             $('a[name="editBtn"]', $grid).click(function() {
                 var itemId = $(this).attr("itemId");
                 $.getJSON("GetMeetDetail?id=" + itemId,
                     function(result) {
                         angel.myDistributeDetailControl.show(result, reloadGrid);
+                    });
+            });
+            $('a[name="activateBtn"]', $grid).click(function() {
+                var itemId = $(this).attr("itemId");
+                $.getJSON("GetMeetDetail?id=" + itemId,
+                    function(result) {
+                        angel.meetActivateControl.show(result, reloadGrid);
                     });
             });
         });
