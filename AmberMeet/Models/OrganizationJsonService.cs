@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AmberMeet.Dto;
+using AmberMeet.Dto.Organizations;
 using AmberMeet.Infrastructure.Search.Paging;
 using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Models.JsonJqGrids;

@@ -48,10 +48,11 @@
     <Compile Include="KeyValueDto.cs" />
     <Compile Include="MeetSignfors\MeetSignforDto.cs" />
     <Compile Include="MeetSignfors\MeetSignforPagedDto.cs" />
-    <Compile Include="Meets\MeetDto.cs" />
     <Compile Include="Meets\MeetPagedDto.cs" />
-    <Compile Include="OrgUserDto.cs" />
-    <Compile Include="OrgUserPagedDto.cs" />
+    <Compile Include="Meets\MeetDto.cs" />
+    <Compile Include="Meets\MeetWaitActivatePagedDto.cs" />
+    <Compile Include="Organizations\OrgUserDto.cs" />
+    <Compile Include="Organizations\OrgUserPagedDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

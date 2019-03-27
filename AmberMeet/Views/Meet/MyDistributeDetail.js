@@ -55,7 +55,7 @@ angel.myDistributeDetailControl = (function($) {
         $startMinute.empty();
         $endMinute.empty();
         var minuteSelects = "";
-        for (var iminute = 0; iminute < 61; iminute++) {
+        for (var iminute = 0; iminute < 60; iminute++) {
             if (iminute != 0 && iminute % 5 != 0) {
                 continue;
             }

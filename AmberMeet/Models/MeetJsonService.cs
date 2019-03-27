@@ -10,19 +10,52 @@ namespace AmberMeet.Models
 {
     internal class MeetJsonService
     {
-        public string GetJqGridJson(PagedResult<MeetPagedDto> pagedResult, int pageIndex, int pageSize)
+        public string GetMyDistributeJqGridJson(PagedResult<MeetWaitActivatePagedDto> pagedResult, int pageIndex,
+            int pageSize)
         {
             IList<JqGridRowObject> rows =
                 pagedResult.Entities.Select(item => new JqGridRowObject(item.Id, new[]
                 {
                     GetSelectItem(item.Id, item.Subject),
                     item.Place,
-                    item.StartTimeText,
-                    item.EndTimeText,
-                    item.NeedFeedbackText,
+                    item.StartTimeStr,
+                    item.EndTimeStr,
+                    item.NeedFeedbackStr,
                     GetWaitSignforCount(item),
                     AlreadySignedCount(item),
                     GetSelectBtn(item.Id, item.Subject)
+                })).ToList();
+            var jsonJqGridObject = new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
+            return jsonJqGridObject.ToJson(true);
+        }
+
+        public string GetMyActivateJqGridJson(PagedResult<MeetPagedDto> pagedResult, int pageIndex, int pageSize)
+        {
+            IList<JqGridRowObject> rows =
+                pagedResult.Entities.Select(item => new JqGridRowObject(item.Id, new[]
+                {
+                    GetSelectItem(item.Id, item.Subject),
+                    item.Place,
+                    item.StartTimeStr,
+                    item.EndTimeStr,
+                    item.NeedFeedbackStr,
+                    GetSignforCount(item)
+                })).ToList();
+            var jsonJqGridObject = new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
+            return jsonJqGridObject.ToJson(true);
+        }
+
+        public string GetMyAllDistributeJqGridJson(PagedResult<MeetPagedDto> pagedResult, int pageIndex, int pageSize)
+        {
+            IList<JqGridRowObject> rows =
+                pagedResult.Entities.Select(item => new JqGridRowObject(item.Id, new[]
+                {
+                    GetSelectItem(item.Id, item.Subject),
+                    item.Place,
+                    item.StartTimeStr,
+                    item.EndTimeStr,
+                    item.NeedFeedbackStr,
+                    GetSignforCount(item)
                 })).ToList();
             var jsonJqGridObject = new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
             return jsonJqGridObject.ToJson(true);
@@ -39,24 +72,34 @@ namespace AmberMeet.Models
         {
             const string selectBtn =
                 "<a name='editBtn' itemId='{itemId}' style='cursor: pointer'>修改</a>" +
-                "&nbsp;|&nbsp;<a name='activateBtn' itemId='{itemId}' style='cursor: pointer'>激活</a>";
+                "&nbsp;|&nbsp;<a name='activateBtn' itemId='{itemId}' style='cursor: pointer'>激活</a>" +
+                "&nbsp;|&nbsp;<a name='signforListBtn' itemId='{itemId}' style='cursor: pointer'>签收详情</a>";
             return selectBtn.Replace("{itemId}", itemId).Replace("{itemName}", itemName);
         }
 
-        private string GetWaitSignforCount(MeetPagedDto item)
+        private string GetWaitSignforCount(MeetWaitActivatePagedDto item)
         {
             const string selectItem =
                 "<a name='waitSignforCountLabel' namesStr='{namesStr}' style='cursor: pointer'>{count}</a>";
             return selectItem.Replace("{namesStr}", item.WaitSignorNamesStr ?? "无")
-                .Replace("{count}", FormatHelper.GetIntString(item.WaitSignforCount));
+                .Replace("{count}", $"{FormatHelper.GetIntString(item.WaitSignforCount)}位");
         }
 
-        private string AlreadySignedCount(MeetPagedDto item)
+        private string AlreadySignedCount(MeetWaitActivatePagedDto item)
         {
             const string selectItem =
                 "<a name='alreadySignCountLabel' namesStr='{namesStr}' style='cursor: pointer'>{count}</a>";
             return selectItem.Replace("{namesStr}", item.AlreadySignorNamesStr ?? "无")
-                .Replace("{count}", FormatHelper.GetIntString(item.AlreadySignedCount));
+                .Replace("{count}", $"{FormatHelper.GetIntString(item.AlreadySignedCount)}位");
+        }
+
+        private string GetSignforCount(MeetPagedDto item)
+        {
+            const string selectItem =
+                "<a name='signforCountLabel' itemId='{itemId}' namesStr='{namesStr}' style='cursor: pointer'>{count}</a>";
+            return selectItem.Replace("{namesStr}", item.SignorNamesStr)
+                .Replace("{count}", $"{FormatHelper.GetIntString(item.SignorCount)}位")
+                .Replace("{itemId}", item.Id);
         }
     }
 }

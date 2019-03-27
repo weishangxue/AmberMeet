@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "会议签收信息";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<input type="hidden" id="meetId" value="@ViewBag.meetId"/>
+<div class="input-group" style="margin-bottom: 3px;">
+    <div class="input-control has-icon-left has-icon-right">
+        <input id="searchText" class="form-control" type="search" placeholder="关键字">
+        <label for="searchText" class="input-control-icon-left search-icon">
+            <i class="icon icon-search"></i>
+        </label>
+    </div>
+    <span class="input-group-btn">
+        <button type="button" id="searchButton" class="btn btn-primary">搜索</button>
+    </span>
+</div>
+<div class="jqGrid_wrapper">
+    <table id="meetSignforList"></table>
+    <div id="meetSignforListPager"></div>
+</div>
+<script src="~/Views/MeetSignfor/MeetSubSignforList.js"></script>

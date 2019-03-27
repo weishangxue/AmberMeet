@@ -11,11 +11,12 @@ using AmberMeet.Infrastructure.Exceptions;
 using AmberMeet.Infrastructure.Search;
 using AmberMeet.Infrastructure.Search.Paging;
 using AmberMeet.Infrastructure.Search.Sort;
+using AmberMeet.Infrastructure.Serialization;
 using AutoMapper;
 
 namespace AmberMeet.AppService.Meets
 {
-    internal class MeetQueryService
+    internal class MeetQueryService : IMeetQueryService
     {
         private readonly IOrgUserRepository _orgUserRepository;
         private readonly IMeetRepository _repository;
@@ -54,12 +55,86 @@ namespace AmberMeet.AppService.Meets
                 });
             }
             meetDto.Signors = signors;
-
+            //MeetActivate
+            if (meet.MeetActivate != null)
+            {
+                meetDto.StartTime = meet.MeetActivate.StartTime;
+                meetDto.EndTime = meet.MeetActivate.EndTime;
+                meetDto.Place = meet.MeetActivate.Place;
+            }
             return meetDto;
         }
 
-        public PagedResult<MeetPagedDto> GetPaged(
-            int pageIndex, int pageSize, string keywords, string ownerId, MeetState? state, DateTime? activateDate)
+        public int GetMyDistributeCount(string ownerId)
+        {
+            return _repository.FindCount(MeetState.WaitActivate, ownerId);
+        }
+
+        public int GetMyActivateCount(string ownerId)
+        {
+            return _repository.FindCount(MeetState.Activate, ownerId);
+        }
+
+        public PagedResult<MeetWaitActivatePagedDto> GetWaitActivates(
+            int pageIndex, int pageSize, string keywords, string ownerId, DateTime? activateDate)
+        {
+            var pagedResult = GetPaged(pageIndex, pageSize, keywords, ownerId, activateDate, MeetState.WaitActivate);
+            /*******************MeetWaitActivatePagedDto*********************************************/
+            var resultList = pagedResult.Entities.Select(i => Mapper.Map<MeetWaitActivatePagedDto>(i)).ToList();
+            var signfors = _repository.FindMeetSignfors(resultList.Select(i => i.Id).ToArray());
+            var signors = _repository.FindMeetSignors(signfors.Select(i => i.SignorId).ToArray());
+            foreach (var resultDto in resultList)
+            {
+                var resultSignfors = signfors.Where(i => i.MeetId == resultDto.Id).ToList();
+                var resultWaitSigns = resultSignfors.Where(i => i.Status == (int) MeetSignforState.WaitSign).ToList();
+                var resultAlreadySigneds =
+                    resultSignfors.Where(i => i.Status == (int) MeetSignforState.AlreadySigned).ToList();
+
+                var resultWaitSignUsers =
+                    signors.Where(t => resultWaitSigns.Select(i => i.SignorId).ToArray().Contains(t.Id)).ToList();
+                var resultAlreadySignUsers =
+                    signors.Where(t => resultAlreadySigneds.Select(i => i.SignorId).ToArray().Contains(t.Id)).ToList();
+                //WaitSignfor
+                resultDto.WaitSignforCount = resultWaitSignUsers.Count;
+                var waitSignorNamesStr = string.Empty;
+                foreach (var resultWaitSignor in resultWaitSignUsers)
+                {
+                    waitSignorNamesStr = $"{waitSignorNamesStr}{resultWaitSignor.Name};";
+                }
+                resultDto.WaitSignorNamesStr = waitSignorNamesStr;
+                //AlreadySigned
+                resultDto.AlreadySignedCount = resultAlreadySignUsers.Count;
+                var alreadySignorNamesStr = string.Empty;
+                foreach (var resultAlreadySignor in resultAlreadySignUsers)
+                {
+                    alreadySignorNamesStr = $"{alreadySignorNamesStr}{resultAlreadySignor.Name};";
+                }
+                resultDto.AlreadySignorNamesStr = alreadySignorNamesStr;
+            }
+            return new PagedResult<MeetWaitActivatePagedDto>(pagedResult.Count, resultList);
+        }
+
+        public PagedResult<MeetPagedDto> GetActivates(
+            int pageIndex, int pageSize, string keywords, string ownerId, DateTime? activateDate)
+        {
+            var pagedResult = GetPaged(pageIndex, pageSize, keywords, ownerId, activateDate, MeetState.Activate);
+            //MeetPagedDto-Activates
+            return GetMeetPagedDtoPagedResult(pagedResult);
+        }
+
+        public PagedResult<MeetPagedDto> GetAllDistributes(
+            int pageIndex, int pageSize, string keywords, string ownerId, DateTime? activateDate, MeetState? state)
+        {
+            var pagedResult = GetPaged(pageIndex, pageSize, keywords, ownerId, activateDate, state);
+            //MeetPagedDto-AllDistributes
+            return GetMeetPagedDtoPagedResult(pagedResult);
+        }
+
+        /// <summary>
+        ///     PagedResult from repository
+        /// </summary>
+        private PagedResult<Meet> GetPaged(
+            int pageIndex, int pageSize, string keywords, string ownerId, DateTime? activateDate, MeetState? state)
         {
             var searchCriteria = new SearchCriteria<Meet>();
             searchCriteria.AddFilterCriteria(t => t.OwnerId == ownerId);
@@ -86,37 +161,34 @@ namespace AmberMeet.AppService.Meets
                 new ExpressionSortCriteria<Meet, DateTime>(s => s.StartTime, SortDirection.Descending));
             searchCriteria.PagingCriteria = new PagingCriteria(pageIndex, pageSize);
             var pagedResult = _repository.FindPaged(searchCriteria);
+            return pagedResult;
+        }
+
+        /// <summary>
+        ///     return map to MeetPagedDto
+        /// </summary>
+        private PagedResult<MeetPagedDto> GetMeetPagedDtoPagedResult(PagedResult<Meet> pagedResult)
+        {
             var resultList = pagedResult.Entities.Select(i => Mapper.Map<MeetPagedDto>(i)).ToList();
-            //Signfor Extensions
             var signfors = _repository.FindMeetSignfors(resultList.Select(i => i.Id).ToArray());
             var signors = _repository.FindMeetSignors(signfors.Select(i => i.SignorId).ToArray());
             foreach (var resultDto in resultList)
             {
                 var resultSignfors = signfors.Where(i => i.MeetId == resultDto.Id).ToList();
-                var resultWaitSigns = resultSignfors.Where(i => i.Status == (int) MeetSignorState.WaitSign).ToList();
-                var resultAlreadySigneds = resultSignfors.Where(i => i.Status == (int) MeetSignorState.AlreadySigned)
-                    .ToList();
-
-                var resultWaitSignUsers =
-                    signors.Where(t => resultWaitSigns.Select(i => i.SignorId).ToArray().Contains(t.Id)).ToList();
-                var resultAlreadySignUsers =
-                    signors.Where(t => resultAlreadySigneds.Select(i => i.SignorId).ToArray().Contains(t.Id)).ToList();
-                //WaitSignfor
-                resultDto.WaitSignforCount = resultWaitSignUsers.Count;
-                var waitSignorNamesStr = string.Empty;
-                foreach (var resultWaitSignor in resultWaitSignUsers)
+                IList<string> resultSignorNames = new List<string>();
+                foreach (var resultSignfor in resultSignfors)
                 {
-                    waitSignorNamesStr = $"{waitSignorNamesStr}{resultWaitSignor.Name};";
+                    var signStateStr = ((MeetSignforState) resultSignfor.Status).ToEnumText();
+                    var signor = signors.FirstOrDefault(i => i.Id == resultSignfor.SignorId);
+                    if (signor == null)
+                    {
+                        continue;
+                    }
+                    var resultSignorName = $"{signor.Name}-{signStateStr}";
+                    resultSignorNames.Add(resultSignorName);
                 }
-                resultDto.WaitSignorNamesStr = waitSignorNamesStr;
-                //AlreadySigned
-                resultDto.AlreadySignedCount = resultAlreadySignUsers.Count;
-                var alreadySignorNamesStr = string.Empty;
-                foreach (var resultAlreadySignor in resultAlreadySignUsers)
-                {
-                    alreadySignorNamesStr = $"{alreadySignorNamesStr}{resultAlreadySignor.Name};";
-                }
-                resultDto.AlreadySignorNamesStr = alreadySignorNamesStr;
+                resultDto.SignorCount = resultSignfors.Count;
+                resultDto.SignorNames = resultSignorNames.ToArray();
             }
             return new PagedResult<MeetPagedDto>(pagedResult.Count, resultList);
         }

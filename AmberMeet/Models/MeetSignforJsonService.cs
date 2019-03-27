@@ -9,17 +9,50 @@ namespace AmberMeet.Models
 {
     internal class MeetSignforJsonService
     {
-        public string GetJqGridJson(PagedResult<MeetSignforPagedDto> pagedResult, int pageIndex, int pageSize)
+        public string GetWaitSignforJqGridJson(
+            PagedResult<MeetSignforPagedDto> pagedResult, int pageIndex, int pageSize)
         {
             IList<JqGridRowObject> rows =
                 pagedResult.Entities.Select(item => new JqGridRowObject(item.Id, new[]
                 {
                     GetSelectItem(item.Id, item.Subject, item.MeetId),
                     item.Place,
-                    item.StartTimeText,
-                    item.EndTimeText,
-                    item.NeedFeedbackText,
+                    item.StartTimeStr,
+                    item.EndTimeStr,
+                    item.NeedFeedbackStr,
                     GetSelectBtn(item.Id)
+                })).ToList();
+            var jsonJqGridObject = new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
+            return jsonJqGridObject.ToJson(true);
+        }
+
+        public string GetAlreadySignedJqGridJson(
+            PagedResult<MeetSignforPagedDto> pagedResult, int pageIndex, int pageSize)
+        {
+            IList<JqGridRowObject> rows =
+                pagedResult.Entities.Select(item => new JqGridRowObject(item.Id, new[]
+                {
+                    GetSelectItem(item.Id, item.Subject, item.MeetId),
+                    item.Place,
+                    item.StartTimeStr,
+                    item.EndTimeStr,
+                    item.NeedFeedbackStr
+                })).ToList();
+            var jsonJqGridObject = new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
+            return jsonJqGridObject.ToJson(true);
+        }
+
+        public string GetAllSignforJqGridJson(
+            PagedResult<MeetSignforPagedDto> pagedResult, int pageIndex, int pageSize)
+        {
+            IList<JqGridRowObject> rows =
+                pagedResult.Entities.Select(item => new JqGridRowObject(item.Id, new[]
+                {
+                    GetSelectItem(item.Id, item.Subject, item.MeetId),
+                    item.Place,
+                    item.StartTimeStr,
+                    item.EndTimeStr,
+                    item.NeedFeedbackStr
                 })).ToList();
             var jsonJqGridObject = new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
             return jsonJqGridObject.ToJson(true);

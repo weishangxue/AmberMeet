@@ -3,7 +3,7 @@ using AmberMeet.Infrastructure.Utilities;
 
 namespace AmberMeet.Dto.Meets
 {
-    public class MeetPagedDto
+    public class MeetWaitActivatePagedDto
     {
         /// <summary>
         ///     主键ID
@@ -18,8 +18,10 @@ namespace AmberMeet.Dto.Meets
 
         /*********Signfor Extensions*******************************************************/
 
-        public int SignorCount { get; set; }
-        public string[] SignorNames { get; set; }
+        public int WaitSignforCount { get; set; }
+        public string WaitSignorNamesStr { get; set; }
+        public int AlreadySignedCount { get; set; }
+        public string AlreadySignorNamesStr { get; set; }
 
         /*********Extensions***************************************************************/
 
@@ -36,23 +38,6 @@ namespace AmberMeet.Dto.Meets
         public string NeedFeedbackStr
         {
             get { return FormatHelper.GetBooleanString(NeedFeedback); }
-        }
-
-        public string SignorNamesStr
-        {
-            get
-            {
-                if (SignorNames.Length == 0)
-                {
-                    return string.Empty;
-                }
-                var signorNamesStr = string.Empty;
-                foreach (var signorName in SignorNames)
-                {
-                    signorNamesStr = $"{signorNamesStr}{signorName};";
-                }
-                return signorNamesStr;
-            }
         }
     }
 }

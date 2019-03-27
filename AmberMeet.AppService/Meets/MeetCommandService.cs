@@ -6,49 +6,23 @@ using AmberMeet.Domain.Meets;
 using AmberMeet.Domain.MeetSignfors;
 using AmberMeet.Dto.Meets;
 using AmberMeet.Infrastructure.Exceptions;
-using AmberMeet.Infrastructure.Search.Paging;
 using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
 using AutoMapper;
 
 namespace AmberMeet.AppService.Meets
 {
-    internal class MeetService : IMeetService
+    internal class MeetCommandService : IMeetCommandService
     {
-        private readonly MeetQueryService _meetQueryService;
         private readonly IMeetRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public MeetService(
+        public MeetCommandService(
             IMeetRepository repository,
-            IUnitOfWork unitOfWork,
-            MeetQueryService meetQueryService)
+            IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
-            _meetQueryService = meetQueryService;
-        }
-
-        public MeetDto GetDetail(string meetId)
-        {
-            return _meetQueryService.GetDetail(meetId);
-        }
-
-        public int GetMyDistributeCount(string ownerId)
-        {
-            return _repository.FindCount(MeetState.WaitActivate, ownerId);
-        }
-
-        public int GetMyActivateCount(string ownerId)
-        {
-            return _repository.FindCount(MeetState.Activate, ownerId);
-        }
-
-        public PagedResult<MeetPagedDto> GetMyDistributes(
-            int pageIndex, int pageSize, string keywords, string ownerId, DateTime? activateDate)
-        {
-            return _meetQueryService.GetPaged(
-                pageIndex, pageSize, keywords, ownerId, MeetState.WaitActivate, activateDate);
         }
 
         public string AddMeet(MeetDto dto)
@@ -76,7 +50,7 @@ namespace AmberMeet.AppService.Meets
                     SignorId = signor.Key,
                     SignorType = (int) MeetSignorType.Org, //暂时默认内部
                     IsRemind = false,
-                    Status = (int) MeetSignorState.WaitSign,
+                    Status = (int) MeetSignforState.WaitSign,
                     ModifiedTime = DateTime.Now
                 };
 
@@ -125,7 +99,7 @@ namespace AmberMeet.AppService.Meets
                     SignorId = signor.Key,
                     SignorType = (int) MeetSignorType.Org, //暂时默认内部
                     IsRemind = false,
-                    Status = (int) MeetSignorState.WaitSign,
+                    Status = (int) MeetSignforState.WaitSign,
                     ModifiedTime = DateTime.Now
                 };
 
@@ -162,12 +136,12 @@ namespace AmberMeet.AppService.Meets
             var signforCount = meet.MeetSignfors.Count;
             for (var i = 0; i < signforCount; i++)
             {
-                if (meet.MeetSignfors[i].Status == (int) MeetSignorState.WaitSign)
+                if (meet.MeetSignfors[i].Status == (int) MeetSignforState.WaitSign)
                 {
-                    meet.MeetSignfors[i].Status = (int) MeetSignorState.AutoSigned;
+                    meet.MeetSignfors[i].Status = (int) MeetSignforState.AutoSigned;
                     if (meet.NeedFeedback)
                     {
-                        meet.MeetSignfors[i].Feedback = MeetSignorState.AutoSigned.ToEnumText();
+                        meet.MeetSignfors[i].Feedback = MeetSignforState.AutoSigned.ToEnumText();
                     }
                 }
             }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AmberMeet.Domain.Data;
 using AmberMeet.Domain.Organizations;
-using AmberMeet.Dto;
+using AmberMeet.Dto.Organizations;
 using AmberMeet.Infrastructure.Search.Paging;
 
 namespace AmberMeet.AppService.Organizations

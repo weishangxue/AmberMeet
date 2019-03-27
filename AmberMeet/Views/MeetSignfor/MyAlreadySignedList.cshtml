@@ -1,12 +1,7 @@
 ﻿@{
-    ViewBag.Title = "我的待签收";
+    ViewBag.Title = "我的已签收";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<form id="mainForm">
-    @{ Html.RenderPartial("Signfor"); }
-</form>
-<script src="~/Views/MeetSignfor/Signfor.js"></script>
-
 <div class="input-group" style="margin-bottom: 3px;">
     <div class="input-control has-icon-left has-icon-right">
         <input id="searchText" class="form-control" type="search" placeholder="关键字" style="width: 90%">
@@ -20,7 +15,7 @@
     </span>
 </div>
 <div class="jqGrid_wrapper">
-    <table id="waitSignforList"></table>
-    <div id="waitSignforListPager"></div>
+    <table id="alreadySignedList"></table>
+    <div id="alreadySignedListPager"></div>
 </div>
-<script src="~/Views/MeetSignfor/MyWaitSignforList.js"></script>
+<script src="~/Views/MeetSignfor/MyAlreadySignedList.js"></script>

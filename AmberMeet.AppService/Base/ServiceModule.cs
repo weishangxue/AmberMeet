@@ -12,7 +12,8 @@ namespace AmberMeet.AppService.Base
         {
             builder.RegisterType<FileMapService>().As<IFileMapService>();
             builder.RegisterType<OrgUserService>().As<IOrgUserService>();
-            builder.RegisterType<MeetService>().As<IMeetService>();
+            builder.RegisterType<MeetCommandService>().As<IMeetCommandService>();
+            builder.RegisterType<MeetQueryService>().As<IMeetQueryService>();
             builder.RegisterType<MeetSignforService>().As<IMeetSignforService>();
         }
     }

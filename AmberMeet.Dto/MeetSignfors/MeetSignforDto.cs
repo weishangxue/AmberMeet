@@ -1,4 +1,6 @@
 ﻿using System;
+using AmberMeet.Domain.MeetSignfors;
+using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
 
 namespace AmberMeet.Dto.MeetSignfors
@@ -19,7 +21,7 @@ namespace AmberMeet.Dto.MeetSignfors
         public DateTime SignTime { get; set; }
         public DateTime ModifiedTime { get; set; }
 
-        /*********Meet Extensions**********************************************************/
+        /*********Meet Extensions*************/
 
         public string Subject { get; set; }
         public string Body { get; set; }
@@ -28,14 +30,44 @@ namespace AmberMeet.Dto.MeetSignfors
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
 
+        /*********Signor Extensions*************/
+
+        public string SignorName { get; set; }
+
         /*********Extensions***************************************************************/
 
-        public string StartTimeText
+        public string FeedbackStr
+        {
+            get
+            {
+                if (Feedback == null)
+                {
+                    return string.Empty;
+                }
+                if (Feedback.Length > 20)
+                {
+                    Feedback = $"{Feedback.Substring(0, 15)}......";
+                }
+                return Feedback;
+            }
+        }
+
+        public string StateStr
+        {
+            get { return ((MeetSignforState) State).ToEnumText(); }
+        }
+
+        public string SignTimeStr
+        {
+            get { return FormatHelper.GetIsoDateTimeString(SignTime); }
+        }
+
+        public string StartTimeStr
         {
             get { return FormatHelper.GetIsoDateTimeString(StartTime); }
         }
 
-        public string EndTimeText
+        public string EndTimeStr
         {
             get { return FormatHelper.GetIsoDateTimeString(EndTime); }
         }

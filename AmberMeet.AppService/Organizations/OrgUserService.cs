@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AmberMeet.Domain.Data;
 using AmberMeet.Domain.Organizations;
-using AmberMeet.Dto;
+using AmberMeet.Dto.Organizations;
 using AmberMeet.Infrastructure.Exceptions;
 using AmberMeet.Infrastructure.Search;
 using AmberMeet.Infrastructure.Search.Paging;

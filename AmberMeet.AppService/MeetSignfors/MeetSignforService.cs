@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AmberMeet.Domain.Data;
 using AmberMeet.Domain.MeetSignfors;
@@ -35,20 +36,88 @@ namespace AmberMeet.AppService.MeetSignfors
 
         public int GetMyWaitSignforCount(string signorId)
         {
-            return _repository.FindCount(MeetSignorState.WaitSign, signorId);
+            return _repository.FindCount(MeetSignforState.WaitSign, signorId);
         }
 
         public int GetMyAlreadySignedCount(string signorId)
         {
-            return _repository.FindCount(MeetSignorState.AlreadySigned, signorId);
+            return _repository.FindCount(MeetSignforState.AlreadySigned, signorId);
         }
 
-        public PagedResult<MeetSignforPagedDto> GetMyWaitSignfors(
+        public PagedResult<MeetSignforPagedDto> GetWaitSignfors(
             int pageIndex, int pageSize, string keywords, string signorId, DateTime? activateDate)
         {
+            return GetPaged(
+                pageIndex, pageSize, keywords, signorId, activateDate, MeetSignforState.WaitSign);
+        }
+
+        public PagedResult<MeetSignforPagedDto> GetAlreadySigneds(
+            int pageIndex, int pageSize, string keywords, string signorId, DateTime? activateDate)
+        {
+            return GetPaged(
+                pageIndex, pageSize, keywords, signorId, activateDate, MeetSignforState.AlreadySigned);
+        }
+
+        public PagedResult<MeetSignforPagedDto> GetAllSignfors(
+            int pageIndex, int pageSize, string keywords,
+            string signorId, DateTime? activateDate, MeetSignforState? state)
+        {
+            return GetPaged(pageIndex, pageSize, keywords, signorId, activateDate, state);
+        }
+
+        public IList<MeetSignforDto> GetMeetSubSignfors(string meetId, string keywords)
+        {
             var searchCriteria = new SearchCriteria<MeetSignfor>();
-            searchCriteria.AddFilterCriteria(t => t.SignorId == signorId);
-            searchCriteria.AddFilterCriteria(t => t.Status == (int) MeetSignorState.WaitSign);
+            searchCriteria.AddFilterCriteria(t => t.MeetId == meetId);
+            if (!string.IsNullOrEmpty(keywords))
+            {
+                searchCriteria.AddFilterCriteria(
+                    t => t.Feedback.Contains(keywords) ||
+                         t.Meet.Subject.Contains(keywords) ||
+                         t.Meet.Body.Contains(keywords) ||
+                         (t.OrgUser != null && t.OrgUser.Name.Contains(keywords)) ||
+                         (t.Meet.MeetActivate == null && t.Meet.Place.Contains(keywords)) ||
+                         (t.Meet.MeetActivate != null && t.Meet.MeetActivate.Place.Contains(keywords)));
+            }
+            var pagedResult = _repository.FindPaged(searchCriteria);
+            return pagedResult.Entities.Select(i => Mapper.Map<MeetSignforDto>(i)).ToList();
+        }
+
+        public void Signfor(string signforId, string feedback)
+        {
+            if (string.IsNullOrEmpty(signforId))
+            {
+                throw new ArgumentNullException(ExMessage.MustNotBeNullOrEmpty(nameof(signforId)));
+            }
+            var meetSignfor = _repository.First(signforId);
+            if (string.IsNullOrEmpty(feedback) && meetSignfor.Meet.NeedFeedback)
+            {
+                throw new ArgumentNullException(ExMessage.MustNotBeNullOrEmpty(nameof(feedback)));
+            }
+            meetSignfor.Feedback = feedback;
+            meetSignfor.SignTime = DateTime.Now;
+            meetSignfor.Status = (int) MeetSignforState.AlreadySigned;
+            _unitOfWork.Commit();
+        }
+
+        /// <summary>
+        ///     GetPaged from repository
+        /// </summary>
+        private PagedResult<MeetSignforPagedDto> GetPaged(
+            int pageIndex, int pageSize, string keywords,
+            string signorId, DateTime? activateDate, MeetSignforState? state)
+        {
+            var searchCriteria = new SearchCriteria<MeetSignfor>();
+
+            if (!string.IsNullOrEmpty(signorId))
+            {
+                searchCriteria.AddFilterCriteria(t => t.SignorId == signorId);
+            }
+
+            if (state != null)
+            {
+                searchCriteria.AddFilterCriteria(t => t.Status == (int) state);
+            }
 
             if (activateDate != null)
             {
@@ -69,6 +138,14 @@ namespace AmberMeet.AppService.MeetSignfors
                 new ExpressionSortCriteria<MeetSignfor, DateTime>(s => s.Meet.StartTime, SortDirection.Descending));
             searchCriteria.PagingCriteria = new PagingCriteria(pageIndex, pageSize);
             var pagedResult = _repository.FindPaged(searchCriteria);
+            return PagedResult(pagedResult);
+        }
+
+        /// <summary>
+        ///     map to MeetSignforPagedDto PagedResult
+        /// </summary>
+        private PagedResult<MeetSignforPagedDto> PagedResult(PagedResult<MeetSignfor> pagedResult)
+        {
             var resultList = pagedResult.Entities.Select(i => new MeetSignforPagedDto
             {
                 Id = i.Id,
@@ -80,23 +157,6 @@ namespace AmberMeet.AppService.MeetSignfors
                 EndTime = i.Meet.EndTime
             }).ToList();
             return new PagedResult<MeetSignforPagedDto>(pagedResult.Count, resultList);
-        }
-
-        public void Signfor(string signforId, string feedback)
-        {
-            if (string.IsNullOrEmpty(signforId))
-            {
-                throw new ArgumentNullException(ExMessage.MustNotBeNullOrEmpty(nameof(signforId)));
-            }
-            var meetSignfor = _repository.First(signforId);
-            if (string.IsNullOrEmpty(feedback) && meetSignfor.Meet.NeedFeedback)
-            {
-                throw new ArgumentNullException(ExMessage.MustNotBeNullOrEmpty(nameof(feedback)));
-            }
-            meetSignfor.Feedback = feedback;
-            meetSignfor.SignTime = DateTime.Now;
-            meetSignfor.Status = (int) MeetSignorState.AlreadySigned;
-            _unitOfWork.Commit();
         }
     }
 }

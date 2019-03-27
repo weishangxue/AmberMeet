@@ -62,9 +62,10 @@
     <Compile Include="FileMaps\IFileMapService.cs" />
     <Compile Include="MeetSignfors\IMeetSignforService.cs" />
     <Compile Include="MeetSignfors\MeetSignforService.cs" />
-    <Compile Include="Meets\IMeetService.cs" />
+    <Compile Include="Meets\IMeetQueryService.cs" />
+    <Compile Include="Meets\IMeetCommandService.cs" />
     <Compile Include="Meets\MeetQueryService.cs" />
-    <Compile Include="Meets\MeetService.cs" />
+    <Compile Include="Meets\MeetCommandService.cs" />
     <Compile Include="Organizations\IOrgUserService.cs" />
     <Compile Include="Organizations\OrgUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -8,21 +8,29 @@
         </div>
         <div class="modal-body" style="padding-top: 3px;">
             <div id="userRoleChangeErrorContainer" class="error"></div>
-            <div class="row form-control col-md-11">
-                <label for="userName">姓名</label>
-                <input id="userName" name="userName" class="form-control" placeholder="姓名" readonly="readonly"/>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-11">
+                        <label for="userName">姓名</label>
+                        <input id="userName" name="userName" class="form-control" placeholder="姓名" readonly="readonly"/>
+                    </div>
+                </div>
             </div>
-            <div class="row form-control col-md-11">
-                <label for="userRole">角色</label>
-                <select class="form-control" id="userRole" name="userRole">
-                    <option value="">所属角色</option>
-                    @{
-                        foreach (var userRole in ViewBag.userRoles)
-                        {
-                            <option value="@userRole.Key">@userRole.Value</option>
-                        }
-                    }
-                </select>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-11">
+                        <label for="userRole">角色</label>
+                        <select class="form-control" id="userRole" name="userRole">
+                            <option value="">所属角色</option>
+                            @{
+                                foreach (var userRole in ViewBag.userRoles)
+                                {
+                                    <option value="@userRole.Key">@userRole.Value</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="modal-footer">

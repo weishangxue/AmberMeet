@@ -232,8 +232,13 @@
     <Content Include="Global.asax" />
     <Content Include="Views\Home\ChangePassword.js" />
     <Content Include="Views\Home\Login.js" />
+    <Content Include="Views\MeetSignfor\MeetSubSignforList.js" />
+    <Content Include="Views\MeetSignfor\MyAllSignforList.js" />
+    <Content Include="Views\MeetSignfor\MyAlreadySignedList.js" />
     <Content Include="Views\MeetSignfor\MyWaitSignforList.js" />
     <Content Include="Views\MeetSignfor\Signfor.js" />
+    <Content Include="Views\Meet\MyAllDistributeList.js" />
+    <Content Include="Views\Meet\MyActivateList.js" />
     <Content Include="Views\Meet\MyDistributeList.js" />
     <Content Include="Views\Meet\MyDistributeDetail.js" />
     <Content Include="Views\Meet\ActivateMeet.js" />
@@ -246,6 +251,7 @@
     <Compile Include="App_Start\DependencyConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MeetQueryController.cs" />
     <Compile Include="Controllers\MeetController.cs" />
     <Compile Include="Controllers\MeetSignforController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -300,6 +306,11 @@
     <Content Include="Views\Meet\MeetDetail.cshtml" />
     <Content Include="Views\MeetSignfor\Signfor.cshtml" />
     <Content Include="Views\Meet\ActivateMeet.cshtml" />
+    <Content Include="Views\MeetSignfor\MyAlreadySignedList.cshtml" />
+    <Content Include="Views\Meet\MyActivateList.cshtml" />
+    <Content Include="Views\Meet\MyAllDistributeList.cshtml" />
+    <Content Include="Views\MeetSignfor\MeetSubSignforList.cshtml" />
+    <Content Include="Views\MeetSignfor\MyAllSignforList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

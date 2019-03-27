@@ -23,17 +23,17 @@ namespace AmberMeet.Dto.MeetSignfors
 
         /*********Extensions***************************************************************/
 
-        public string StartTimeText
+        public string StartTimeStr
         {
             get { return FormatHelper.GetIsoDateTimeString(StartTime); }
         }
 
-        public string EndTimeText
+        public string EndTimeStr
         {
             get { return FormatHelper.GetIsoDateTimeString(EndTime); }
         }
 
-        public string NeedFeedbackText
+        public string NeedFeedbackStr
         {
             get { return FormatHelper.GetBooleanString(NeedFeedback); }
         }

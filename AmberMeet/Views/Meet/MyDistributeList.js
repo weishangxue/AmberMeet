@@ -8,7 +8,7 @@
     var gridPager = "#meetListPager";
 
     var gridUrl = function() {
-        var listUrl = "GetMyDistributeList?keywords={keywords}&activateIsoDate={activateIsoDate}";
+        var listUrl = "../MeetQuery/GetMyWaitActivateList?keywords={keywords}&activateIsoDate={activateIsoDate}";
         listUrl = listUrl.replace("{keywords}", $searchText.val());
         listUrl = listUrl.replace("{activateIsoDate}", $activateDate.val());
         return listUrl;
@@ -29,7 +29,7 @@
             { name: "needFeedback", index: "needFeedback", width: 50, sortable: false },
             { name: "waitSignforCount", index: "waitSignforCount", width: 50, sortable: false },
             { name: "alreadySignCoun", index: "alreadySignCoun", width: 50, sortable: false },
-            { name: "selectBtn", index: "selectBtn", width: 50, sortable: false }
+            { name: "selectBtn", index: "selectBtn", width: 80, sortable: false }
         ];
         var url = gridUrl();
         angel.jqGrid.setGridUrl(url);
@@ -52,17 +52,20 @@
             });
             $('a[name="editBtn"]', $grid).click(function() {
                 var itemId = $(this).attr("itemId");
-                $.getJSON("GetMeetDetail?id=" + itemId,
+                $.getJSON("../MeetQuery/GetMeetDetail?id=" + itemId,
                     function(result) {
                         angel.myDistributeDetailControl.show(result, reloadGrid);
                     });
             });
             $('a[name="activateBtn"]', $grid).click(function() {
                 var itemId = $(this).attr("itemId");
-                $.getJSON("GetMeetDetail?id=" + itemId,
+                $.getJSON("../MeetQuery/GetMeetDetail?id=" + itemId,
                     function(result) {
                         angel.meetActivateControl.show(result, reloadGrid);
                     });
+            });
+            $('a[name="signforListBtn"]', $grid).click(function() {
+                angel.openWnd("../MeetSignfor/MeetSubSignforList?meetId=" + $(this).attr("itemId"), 993, 530);
             });
         });
         angel.jqGrid.initialize($grid, gridPager, colNames, colModel, null);

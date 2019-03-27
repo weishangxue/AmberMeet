@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using AmberMeet.AppService.MeetSignfors;
+using AmberMeet.Domain.MeetSignfors;
 using AmberMeet.Infrastructure.Exceptions;
 using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
@@ -22,6 +23,39 @@ namespace AmberMeet.Controllers
 
         public ActionResult MyWaitSignforList()
         {
+            if (!IsValidAccount())
+            {
+                return ErrorLoginView();
+            }
+            return View();
+        }
+
+        public ActionResult MyAlreadySignedList()
+        {
+            if (!IsValidAccount())
+            {
+                return ErrorLoginView();
+            }
+            return View();
+        }
+
+        public ActionResult MyAllSignforList()
+        {
+            if (!IsValidAccount())
+            {
+                return ErrorLoginView();
+            }
+            ViewBag.signforStates = MeetSignforState.WaitSign.GetDescriptions();
+            return View();
+        }
+
+        public ActionResult MeetSubSignforList(string meetId)
+        {
+            if (!IsValidAccount())
+            {
+                return ErrorLoginView();
+            }
+            ViewBag.meetId = meetId;
             return View();
         }
 
@@ -40,8 +74,91 @@ namespace AmberMeet.Controllers
                 {
                     activateDate = DateTimeHelper.GetIsoDateValue(activateIsoDate);
                 }
-                var list = _meetSignforService.GetMyWaitSignfors(page, rows, keywords, SessionUserId, activateDate);
-                return _jsonService.GetJqGridJson(list, page, rows);
+                var list = _meetSignforService.GetWaitSignfors(page, rows, keywords, SessionUserId, activateDate);
+                return _jsonService.GetWaitSignforJqGridJson(list, page, rows);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ExceptionLog(ex);
+                var result = HtmlHelper.Encode(ex.Message);
+                return Ok(false, result);
+            }
+        }
+
+        [HttpGet]
+        public string GetAlreadySignedList(
+            int page, int rows, string keywords, string activateIsoDate)
+        {
+            try
+            {
+                if (!IsValidAccount())
+                {
+                    return OkLoginError();
+                }
+                DateTime? activateDate = null;
+                if (!string.IsNullOrEmpty(activateIsoDate))
+                {
+                    activateDate = DateTimeHelper.GetIsoDateValue(activateIsoDate);
+                }
+                var list = _meetSignforService.GetAlreadySigneds(page, rows, keywords, SessionUserId, activateDate);
+                return _jsonService.GetAlreadySignedJqGridJson(list, page, rows);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ExceptionLog(ex);
+                var result = HtmlHelper.Encode(ex.Message);
+                return Ok(false, result);
+            }
+        }
+
+        [HttpGet]
+        public string GetAllSignforList(
+            int page, int rows, string keywords, string activateIsoDate, int? state)
+        {
+            try
+            {
+                if (!IsValidAccount())
+                {
+                    return OkLoginError();
+                }
+                DateTime? activateDate = null;
+                if (!string.IsNullOrEmpty(activateIsoDate))
+                {
+                    activateDate = DateTimeHelper.GetIsoDateValue(activateIsoDate);
+                }
+                MeetSignforState? signorState = null;
+                if (state != null)
+                {
+                    signorState = (MeetSignforState) state;
+                }
+                var list = _meetSignforService.GetAllSignfors(page, rows, keywords, SessionUserId, activateDate,
+                    signorState);
+                return _jsonService.GetAllSignforJqGridJson(list, page, rows);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.ExceptionLog(ex);
+                var result = HtmlHelper.Encode(ex.Message);
+                return Ok(false, result);
+            }
+        }
+
+        [HttpGet]
+        public string GetMeetSubSignforList(string meetId, string keywords)
+        {
+            try
+            {
+                if (!IsValidAccount())
+                {
+                    return OkLoginError();
+                }
+                DateTime? activateDate = null;
+                if (string.IsNullOrEmpty(meetId))
+                {
+                    throw new PreValidationException("所属会议不允许为空");
+                }
+                var list = _meetSignforService.GetMeetSubSignfors(meetId, keywords);
+                return Ok(list);
             }
             catch (Exception ex)
             {

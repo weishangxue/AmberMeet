@@ -18,28 +18,28 @@
         <li class="open">
             <a href="#"><i class="icon icon-paste"></i>我的发起</a>
             <ul>
-                <li class="active">
+                <li>
                     <a href="#" linkurl="../Meet/MyDistributeList" title="发起并待激活的会议">已发起(@ViewBag.MyDistributeCount)</a>
                 </li>
                 <li>
-                    <a href="#" title="发起已激活的会议">已激活(@ViewBag.myActivateCount)</a>
+                    <a href="#" linkurl="../Meet/MyActivateList" title="发起已激活的会议">已激活(@ViewBag.myActivateCount)</a>
                 </li>
                 <li>
-                    <a href="#" title="所有已发起的会议(含已取消)">发起记录</a>
+                    <a href="#" linkurl="../Meet/MyAllDistributeList" title="所有已发起的会议(含已取消)">发起记录</a>
                 </li>
             </ul>
         </li>
         <li class="open">
             <a href="#"><i class="icon icon-time"></i>我的签收</a>
             <ul>
-                <li>
+                <li class="active">
                     <a href="#" linkurl="../MeetSignfor/MyWaitSignforList" title="未签收的会议">待签收(@ViewBag.myWaitSignforCount)</a>
                 </li>
                 <li>
-                    <a href="#" title="已签收并待激活的会议">已签收(@ViewBag.myAlreadySignedCount)</a>
+                    <a href="#" linkurl="../MeetSignfor/MyAlreadySignedList" title="已签收并待激活的会议">已签收(@ViewBag.myAlreadySignedCount)</a>
                 </li>
                 <li>
-                    <a href="#" title="所有已签收的会议(含已取消)">签收记录</a>
+                    <a href="#" linkurl="../MeetSignfor/MyAllSignforList" title="所有已签收的会议(含已取消)">签收记录</a>
                 </li>
             </ul>
         </li>

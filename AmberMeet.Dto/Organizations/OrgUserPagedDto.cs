@@ -3,7 +3,7 @@ using AmberMeet.Domain.Organizations;
 using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
 
-namespace AmberMeet.Dto
+namespace AmberMeet.Dto.Organizations
 {
     public class OrgUserPagedDto
     {
