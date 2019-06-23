@@ -6,7 +6,6 @@ using AmberMeet.Infrastructure.Exceptions;
 using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
 using AmberMeet.Models;
-using HtmlHelper = AmberMeet.Infrastructure.Utilities.HtmlHelper;
 
 namespace AmberMeet.Controllers
 {
@@ -23,65 +22,47 @@ namespace AmberMeet.Controllers
 
         public ActionResult MyWaitSignforList()
         {
-            if (!IsValidAccount())
-            {
-                return ErrorLoginView();
-            }
+            ValidationLoginV();
             return View();
         }
 
         public ActionResult MyAlreadySignedList()
         {
-            if (!IsValidAccount())
-            {
-                return ErrorLoginView();
-            }
+            ValidationLoginV();
             return View();
         }
 
         public ActionResult MyAllSignforList()
         {
-            if (!IsValidAccount())
-            {
-                return ErrorLoginView();
-            }
+            ValidationLoginV();
             ViewBag.signforStates = MeetSignforState.WaitSign.GetDescriptions();
             return View();
         }
 
         public ActionResult MeetSubSignforList(string meetId)
         {
-            if (!IsValidAccount())
-            {
-                return ErrorLoginView();
-            }
+            ValidationLoginV();
             ViewBag.meetId = meetId;
             return View();
         }
 
-        [HttpGet]
         public string GetWaitSignforList(
             int page, int rows, string keywords, string activateIsoDate)
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
                 DateTime? activateDate = null;
                 if (!string.IsNullOrEmpty(activateIsoDate))
                 {
                     activateDate = DateTimeHelper.GetIsoDateValue(activateIsoDate);
                 }
                 var list = _meetSignforService.GetWaitSignfors(page, rows, keywords, SessionUserId, activateDate);
-                return _jsonService.GetWaitSignforJqGridJson(list, page, rows);
+                var grid = _jsonService.GetWaitSignforJqGridJson(list, page, rows);
+                return OkJqGrid(grid);
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkExceptionStr(ex);
             }
         }
 
@@ -91,23 +72,17 @@ namespace AmberMeet.Controllers
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
                 DateTime? activateDate = null;
                 if (!string.IsNullOrEmpty(activateIsoDate))
                 {
                     activateDate = DateTimeHelper.GetIsoDateValue(activateIsoDate);
                 }
                 var list = _meetSignforService.GetAlreadySigneds(page, rows, keywords, SessionUserId, activateDate);
-                return _jsonService.GetAlreadySignedJqGridJson(list, page, rows);
+                return OkJqGrid(_jsonService.GetAlreadySignedJqGridJson(list, page, rows));
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkExceptionStr(ex);
             }
         }
 
@@ -117,10 +92,6 @@ namespace AmberMeet.Controllers
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
                 DateTime? activateDate = null;
                 if (!string.IsNullOrEmpty(activateIsoDate))
                 {
@@ -133,26 +104,21 @@ namespace AmberMeet.Controllers
                 }
                 var list = _meetSignforService.GetAllSignfors(page, rows, keywords, SessionUserId, activateDate,
                     signorState);
-                return _jsonService.GetAllSignforJqGridJson(list, page, rows);
+                return OkJqGrid(_jsonService.GetAllSignforJqGridJson(list, page, rows));
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkExceptionStr(ex);
             }
         }
 
         [HttpGet]
-        public string GetMeetSubSignforList(string meetId, string keywords)
+        public ActionResult GetMeetSubSignforList(string meetId, string keywords)
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
-                DateTime? activateDate = null;
+                ValidationLogin();
+                //DateTime? activateDate = null;
                 if (string.IsNullOrEmpty(meetId))
                 {
                     throw new PreValidationException("所属会议不允许为空");
@@ -162,40 +128,28 @@ namespace AmberMeet.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
 
         [HttpGet]
-        public string GetSignfor(string signforId)
+        public ActionResult GetSignfor(string signforId)
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
-                return _meetSignforService.GetDetail(signforId).ToJson();
+                return OkJson(_meetSignforService.GetDetail(signforId));
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
 
         [HttpPost]
-        public string PutSignfor(string signforId, string feedback)
+        public ActionResult PutSignfor(string signforId, string feedback)
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
                 if (string.IsNullOrEmpty(signforId))
                 {
                     throw new PreValidationException("ID不允许为空");
@@ -205,9 +159,7 @@ namespace AmberMeet.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
     }

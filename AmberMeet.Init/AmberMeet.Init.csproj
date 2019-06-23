@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AmberMeet.Domain">
-      <HintPath>..\AmberMeet.Domain\AmberMeet.Domain.dll</HintPath>
-    </Reference>
     <Reference Include="Autofac, Version=4.9.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.9.1\lib\net45\Autofac.dll</HintPath>
     </Reference>
@@ -60,6 +57,10 @@
     <ProjectReference Include="..\AmberMeet.AppService\AmberMeet.AppService.csproj">
       <Project>{169ba54f-951f-400d-8392-f898f5c60767}</Project>
       <Name>AmberMeet.AppService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AmberMeet.Domain\AmberMeet.Domain.csproj">
+      <Project>{28f63305-4324-41c2-a798-599cd71069c7}</Project>
+      <Name>AmberMeet.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\AmberMeet.Dto\AmberMeet.Dto.csproj">
       <Project>{3E436D33-16BF-470D-A3D2-4D676B09FE30}</Project>

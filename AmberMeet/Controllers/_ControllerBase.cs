@@ -3,6 +3,8 @@ using System.Web.Mvc;
 using AmberMeet.Domain.Organizations;
 using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
+using AmberMeet.Models.JsonJqGrids;
+using HtmlHelper = AmberMeet.Infrastructure.Utilities.HtmlHelper;
 
 namespace AmberMeet.Controllers
 {
@@ -35,7 +37,19 @@ namespace AmberMeet.Controllers
             }
         }
 
-        protected bool IsValidAccount(UserRole role = UserRole.Ordinay)
+        protected void ValidationLoginV(UserRole role = UserRole.Ordinay)
+        {
+            try
+            {
+                ValidationLogin(role);
+            }
+            catch (Exception ex)
+            {
+                Response.Redirect($"~/Home/LoginError?msg={ex.Message}");
+            }
+        }
+
+        protected void ValidationLogin(UserRole role = UserRole.Ordinay)
         {
             if (ConfigHelper.IsDebug)
             {
@@ -43,37 +57,23 @@ namespace AmberMeet.Controllers
             }
             if (string.IsNullOrEmpty(SessionUserId))
             {
-                ViewData["loginErrorMsg"] = "当前用户为空";
-                return false;
+                throw new Exception("登录已失效,请重新登录再操作.");
             }
             try
             {
                 var currentUser = OrgUserDataService.Find(SessionUserId);
                 if (role == UserRole.Manager && (UserRole) currentUser.Role == UserRole.Ordinay)
                 {
-                    ViewData["loginErrorMsg"] = "权限不足";
-                    return false;
+                    throw new Exception("权限不足");
                 }
                 SessionUserId = currentUser.Id;
                 SessionUserRealName = currentUser.Name;
-                return true;
             }
             catch (Exception ex)
             {
                 LogHelper.ExceptionLog(ex);
-                ViewData["loginErrorMsg"] = $"ex.Message={ex.Message}";
-                return false;
+                throw;
             }
-        }
-
-        protected ActionResult ErrorLoginView()
-        {
-            return View("../Home/Login");
-        }
-
-        protected RedirectResult ErrorLoginRedirect()
-        {
-            return Redirect("LoginError");
         }
 
         protected ActionResult ErrorView(string errorMsg)
@@ -82,21 +82,34 @@ namespace AmberMeet.Controllers
             return View("Error");
         }
 
-        protected string Ok(object resultValue = null)
+        protected ActionResult OkJson(object resultValue)
         {
+            ValidationLogin();
+            return Json(resultValue, JsonRequestBehavior.AllowGet);
+        }
+
+        protected string OkJqGrid(JqGridObject value)
+        {
+            ValidationLogin();
+            return value.ToJson(true);
+        }
+
+        protected ActionResult Ok(object resultValue = null, bool allowGet = false)
+        {
+            ValidationLogin();
             if (resultValue == null)
             {
                 resultValue = "complete";
             }
-            return Ok(true, resultValue);
+            return Ok(true, resultValue, allowGet);
         }
 
-        protected string OkLoginError()
+        protected ActionResult OkLoginError()
         {
             return Ok(false, "登录已失效,请重新登录再操作.");
         }
 
-        protected string Ok(bool result, object resultValue)
+        protected ActionResult Ok(bool result, object resultValue, bool allowGet = false)
         {
             //1代表false,0代表true
             var resultInt = 0;
@@ -104,9 +117,25 @@ namespace AmberMeet.Controllers
             {
                 resultInt = 1;
             }
+            if (allowGet)
+            {
+                return Json(new {result = resultInt, resultValue}, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new {result = resultInt, resultValue});
+        }
 
-            var objectMsg = new {result = resultInt, resultValue}.ToJson();
-            return objectMsg;
+        protected string OkExceptionStr(Exception ex)
+        {
+            LogHelper.ExceptionLog(ex);
+            var result = HtmlHelper.Encode(ex.Message);
+            return new {result = 0, resultValue = result}.ToJson();
+        }
+
+        protected ActionResult OkException(Exception ex)
+        {
+            LogHelper.ExceptionLog(ex);
+            var result = HtmlHelper.Encode(ex.Message);
+            return Ok(false, result);
         }
     }
 }

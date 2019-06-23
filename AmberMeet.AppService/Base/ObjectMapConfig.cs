@@ -22,9 +22,9 @@ namespace AmberMeet.AppService.Base
                     .ForMember(t => t.LoginName, opt => opt.MapFrom(s => s.Account));
                 //meet map
                 cfg.CreateMap<Meet, MeetDto>()
-                    .ForMember(t => t.State, opt => opt.MapFrom(s => s.Status));
+                    .ForMember(t => t.State, opt => opt.MapFrom(s => s.State));
                 cfg.CreateMap<MeetDto, Meet>()
-                    .ForMember(t => t.Status, opt => opt.MapFrom(s => s.State));
+                    .ForMember(t => t.State, opt => opt.MapFrom(s => s.State));
                 cfg.CreateMap<Meet, MeetWaitActivatePagedDto>();
                 cfg.CreateMap<Meet, MeetPagedDto>()
                     .ForMember(t => t.StartTime,
@@ -35,7 +35,7 @@ namespace AmberMeet.AppService.Base
                         opt => opt.MapFrom(s => s.MeetActivate == null ? s.Place : s.MeetActivate.Place));
                 //meet signfor map
                 cfg.CreateMap<MeetSignfor, MeetSignforDto>()
-                    .ForMember(t => t.State, opt => opt.MapFrom(s => s.Status))
+                    .ForMember(t => t.State, opt => opt.MapFrom(s => s.State))
                     .ForMember(t => t.Subject, opt => opt.MapFrom(s => s.Meet.Subject))
                     .ForMember(t => t.Body, opt => opt.MapFrom(s => s.Meet.Body))
                     .ForMember(t => t.Place, opt => opt.MapFrom(s => s.Meet.Place))

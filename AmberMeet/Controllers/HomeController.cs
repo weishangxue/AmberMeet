@@ -5,7 +5,6 @@ using AmberMeet.Domain.Organizations;
 using AmberMeet.Infrastructure.Exceptions;
 using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
-using HtmlHelper = AmberMeet.Infrastructure.Utilities.HtmlHelper;
 
 namespace AmberMeet.Controllers
 {
@@ -18,6 +17,12 @@ namespace AmberMeet.Controllers
             _orgUserService = orgUserService;
         }
 
+        public ActionResult LoginError(string msg)
+        {
+            ViewBag.LoginErrorMsg = msg;
+            return View();
+        }
+
         public ActionResult Login()
         {
             return View();
@@ -25,10 +30,7 @@ namespace AmberMeet.Controllers
 
         public ActionResult ChangePassword()
         {
-            if (!IsValidAccount())
-            {
-                return ErrorLoginView();
-            }
+            ValidationLoginV();
             return View();
         }
 
@@ -36,14 +38,13 @@ namespace AmberMeet.Controllers
         {
             try
             {
-                if (!IsValidAccount())
-                    return ErrorLoginView();
+                ValidationLoginV();
                 if (userId == null)
                 {
                     userId = SessionUserId;
                 }
                 var user = _orgUserService.Get(userId);
-                ViewBag.Status = ((UserState) user.Status).ToEnumText();
+                ViewBag.Status = ((UserState) user.State).ToEnumText();
                 ViewBag.Sex = ((UserSex) user.Sex).ToEnumText();
                 return View(user);
             }
@@ -55,7 +56,7 @@ namespace AmberMeet.Controllers
         }
 
         [HttpPost]
-        public string PostLogin(string loginName, string password)
+        public ActionResult PostLogin(string loginName, string password)
         {
             try
             {
@@ -86,14 +87,12 @@ namespace AmberMeet.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
 
         [HttpPost]
-        public string PostTestUserLogin()
+        public ActionResult PostTestUserLogin()
         {
             try
             {
@@ -109,21 +108,16 @@ namespace AmberMeet.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
 
         [HttpPost]
-        public string PutPassword(string password, string newPassword)
+        public ActionResult PutPassword(string password, string newPassword)
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
+                ValidationLogin();
                 if (string.IsNullOrEmpty(password))
                 {
                     throw new PreValidationException("密码不允许为空");
@@ -150,9 +144,7 @@ namespace AmberMeet.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
 

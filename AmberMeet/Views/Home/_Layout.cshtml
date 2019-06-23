@@ -1,24 +1,21 @@
-﻿@{
+﻿@using System.Web.Optimization
+@{
     Layout = null;
 }
 <!DOCTYPE html>
 <html>
 <head>
     <title>@ViewBag.Title</title>
-    <link href="~/AppFrontend/bower_components/zui/css/zui.css" rel="stylesheet"/>
-    <link href="~/AppFrontend/css/login.style.css" rel="stylesheet"/>
-    <script src="~/AppFrontend/bower_components/jquery/jquery.min.js"></script>
-    <script src="~/AppFrontend/bower_components/jquery/jquery.form.js"></script>
-    <script src="~/AppFrontend/bower_components/zui/js/zui.js"></script>
-    <script src="~/AppFrontend/angel-js/angel.js"></script>
-    <script src="~/AppFrontend/angel-js/angel.confirmation.js"></script>
-    <script src="~/AppFrontend/angel-js/angel.prompt.js"></script>
+    @Styles.Render("~/content/my.login")
 </head>
 <body style="padding-top: 0;">
 <h1 style="margin-bottom: 0;">
     <img style="height: 160px; width: auto" src="~/AppFrontend/images/logo_login_201903071223b.png"/>
 </h1>
 <div class="contact">
+    @Scripts.Render("~/js/my.jquery")
+    @Scripts.Render("~/js/my.jquery.ex")
+    @Scripts.Render("~/js/my.bootui")
     @RenderBody()
 </div>
 <div class="copyright">

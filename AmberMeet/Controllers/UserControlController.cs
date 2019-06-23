@@ -42,7 +42,7 @@ namespace AmberMeet.Controllers
         ///     上传文件(jquery-fileupload)
         /// </summary>
         /// <returns></returns>
-        public string UploadFile()
+        public ActionResult UploadFile()
         {
             try
             {
@@ -79,7 +79,7 @@ namespace AmberMeet.Controllers
             }
         }
 
-        public string UploadImage(string imageData)
+        public ActionResult UploadImage(string imageData)
         {
             try
             {

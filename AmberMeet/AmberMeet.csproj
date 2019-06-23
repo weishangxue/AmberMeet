@@ -23,6 +23,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,9 +44,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AmberMeet.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AmberMeet.Domain\AmberMeet.Domain.dll</HintPath>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Autofac, Version=4.9.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.9.1\lib\net45\Autofac.dll</HintPath>
@@ -76,6 +76,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -83,6 +86,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web.Razor">
@@ -129,8 +135,8 @@
     <Content Include="AppFrontend\bower_components\jqgrid\css\ui.jqgrid-bootstrap4.css" />
     <Content Include="AppFrontend\bower_components\jqgrid\css\ui.jqgrid.css.css" />
     <Content Include="AppFrontend\bower_components\jqgrid\grid.locale-cn.js" />
-    <Content Include="AppFrontend\bower_components\jqgrid\jquery.fileupload.js" />
-    <Content Include="AppFrontend\bower_components\jqgrid\jquery.iframe-transport.js" />
+    <Content Include="AppFrontend\bower_components\jquery\jquery.fileupload.js" />
+    <Content Include="AppFrontend\bower_components\jquery\jquery.iframe-transport.js" />
     <Content Include="AppFrontend\bower_components\jqgrid\jquery.jqGrid.min.js" />
     <Content Include="AppFrontend\bower_components\jquery\jquery-ui.custom.js" />
     <Content Include="AppFrontend\bower_components\jquery\jquery.form.js" />
@@ -230,24 +236,25 @@
     <Content Include="AppFrontend\images\UserNameIcon.png" />
     <Content Include="Default.htm" />
     <Content Include="Global.asax" />
-    <Content Include="Views\Home\ChangePassword.js" />
-    <Content Include="Views\Home\Login.js" />
-    <Content Include="Views\MeetSignfor\MeetSubSignforList.js" />
-    <Content Include="Views\MeetSignfor\MyAllSignforList.js" />
-    <Content Include="Views\MeetSignfor\MyAlreadySignedList.js" />
-    <Content Include="Views\MeetSignfor\MyWaitSignforList.js" />
-    <Content Include="Views\MeetSignfor\Signfor.js" />
-    <Content Include="Views\Meet\MyAllDistributeList.js" />
-    <Content Include="Views\Meet\MyActivateList.js" />
-    <Content Include="Views\Meet\MyDistributeList.js" />
-    <Content Include="Views\Meet\MyDistributeDetail.js" />
-    <Content Include="Views\Meet\ActivateMeet.js" />
-    <Content Include="Views\Organization\UserRoleChange.js" />
-    <Content Include="Views\Organization\UserDetail.js" />
-    <Content Include="Views\Organization\UserList.js" />
+    <Content Include="AppFrontend\view-resources\Home\ChangePassword.js" />
+    <Content Include="AppFrontend\view-resources\Home\Login.js" />
+    <Content Include="AppFrontend\view-resources\MeetSignfor\MeetSubSignforList.js" />
+    <Content Include="AppFrontend\view-resources\MeetSignfor\MyAllSignforList.js" />
+    <Content Include="AppFrontend\view-resources\MeetSignfor\MyAlreadySignedList.js" />
+    <Content Include="AppFrontend\view-resources\MeetSignfor\MyWaitSignforList.js" />
+    <Content Include="AppFrontend\view-resources\MeetSignfor\Signfor.js" />
+    <Content Include="AppFrontend\view-resources\Meet\MyAllDistributeList.js" />
+    <Content Include="AppFrontend\view-resources\Meet\MyActivateList.js" />
+    <Content Include="AppFrontend\view-resources\Meet\MyDistributeList.js" />
+    <Content Include="AppFrontend\view-resources\Meet\MyDistributeDetail.js" />
+    <Content Include="AppFrontend\view-resources\Meet\ActivateMeet.js" />
+    <Content Include="AppFrontend\view-resources\Organization\UserRoleChange.js" />
+    <Content Include="AppFrontend\view-resources\Organization\UserDetail.js" />
+    <Content Include="AppFrontend\view-resources\Organization\UserList.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\DependencyConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -261,6 +268,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\HtmlExtensions.cs" />
     <Compile Include="Models\JsonJqGrids\JqGridObject.cs" />
     <Compile Include="Models\JsonJqGrids\JqGridRowObject.cs" />
     <Compile Include="Models\MeetJsonService.cs" />
@@ -325,6 +333,10 @@
     <ProjectReference Include="..\AmberMeet.AppService\AmberMeet.AppService.csproj">
       <Project>{169ba54f-951f-400d-8392-f898f5c60767}</Project>
       <Name>AmberMeet.AppService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AmberMeet.Domain\AmberMeet.Domain.csproj">
+      <Project>{28f63305-4324-41c2-a798-599cd71069c7}</Project>
+      <Name>AmberMeet.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\AmberMeet.Dto\AmberMeet.Dto.csproj">
       <Project>{3e436d33-16bf-470d-a3d2-4d676b09fe30}</Project>

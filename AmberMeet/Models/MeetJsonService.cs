@@ -2,7 +2,6 @@
 using System.Linq;
 using AmberMeet.Dto.Meets;
 using AmberMeet.Infrastructure.Search.Paging;
-using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
 using AmberMeet.Models.JsonJqGrids;
 
@@ -10,7 +9,7 @@ namespace AmberMeet.Models
 {
     internal class MeetJsonService
     {
-        public string GetMyDistributeJqGridJson(PagedResult<MeetWaitActivatePagedDto> pagedResult, int pageIndex,
+        public JqGridObject GetMyDistributeJqGridJson(PagedResult<MeetWaitActivatePagedDto> pagedResult, int pageIndex,
             int pageSize)
         {
             IList<JqGridRowObject> rows =
@@ -25,11 +24,10 @@ namespace AmberMeet.Models
                     AlreadySignedCount(item),
                     GetSelectBtn(item.Id, item.Subject)
                 })).ToList();
-            var jsonJqGridObject = new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
-            return jsonJqGridObject.ToJson(true);
+            return new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
         }
 
-        public string GetMyActivateJqGridJson(PagedResult<MeetPagedDto> pagedResult, int pageIndex, int pageSize)
+        public JqGridObject GetMyActivateJqGridJson(PagedResult<MeetPagedDto> pagedResult, int pageIndex, int pageSize)
         {
             IList<JqGridRowObject> rows =
                 pagedResult.Entities.Select(item => new JqGridRowObject(item.Id, new[]
@@ -41,11 +39,11 @@ namespace AmberMeet.Models
                     item.NeedFeedbackStr,
                     GetSignforCount(item)
                 })).ToList();
-            var jsonJqGridObject = new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
-            return jsonJqGridObject.ToJson(true);
+            return new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
         }
 
-        public string GetMyAllDistributeJqGridJson(PagedResult<MeetPagedDto> pagedResult, int pageIndex, int pageSize)
+        public JqGridObject GetMyAllDistributeJqGridJson(PagedResult<MeetPagedDto> pagedResult, int pageIndex,
+            int pageSize)
         {
             IList<JqGridRowObject> rows =
                 pagedResult.Entities.Select(item => new JqGridRowObject(item.Id, new[]
@@ -57,8 +55,7 @@ namespace AmberMeet.Models
                     item.NeedFeedbackStr,
                     GetSignforCount(item)
                 })).ToList();
-            var jsonJqGridObject = new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
-            return jsonJqGridObject.ToJson(true);
+            return new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
         }
 
         private string GetSelectItem(string itemId, string itemName)

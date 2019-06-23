@@ -22,7 +22,7 @@ namespace AmberMeet.Controllers
             return View();
         }
 
-        public string UploadImage(string imageData)
+        public ActionResult UploadImage(string imageData)
         {
             try
             {

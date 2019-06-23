@@ -27,7 +27,7 @@ namespace AmberMeet.Test.DataSimulation.Models
                     Birthday = DateTime.Now.AddDays(rd.Next(1, 6)),
                     Mobile = $"188{FormatHelper.GetIntString(rd.Next(1, 3000)).PadLeft(4, '0')}" +
                              $"{FormatHelper.GetIntString(rd.Next(1, 3000)).PadLeft(4, '0')}",
-                    Status = (int) UserState.Normal
+                    State = (int) UserState.Normal
                 };
                 //if (i < 100)
                 //{

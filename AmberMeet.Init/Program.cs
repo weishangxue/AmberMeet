@@ -48,7 +48,7 @@ namespace AmberMeet.Init
                         Sex = (int) UserSex.Man,
                         Birthday = DateTime.Now,
                         Mobile = "-",
-                        Status = (int) UserState.Normal
+                        State = (int) UserState.Normal
                     };
 
                     OrgUserService.AddUser(newAminUser);

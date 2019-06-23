@@ -4,7 +4,7 @@
 }
 <form id="mainForm">
     <input type="hidden" id="userId" name="userId" value="@ViewData["userId"]"/>
-    <input type="hidden" id="status" name="status" value="@ViewData["status"]"/>
+    <input type="hidden" id="state" name="state" value="@ViewData["state"]"/>
     <div id="orgUserContainer" class="form-horizontal">
         <div id="orgUserErrorContainer" class="error"></div>
         <div class="form-group">
@@ -47,9 +47,9 @@
             <div class="col-md-3 col-sm-5">
                 <input type="text" class="form-control" id="code" name="code" value="@ViewData["code"]">
             </div>
-            <label for="statusName" class="col-sm-1">状态</label>
+            <label for="stateName" class="col-sm-1">状态</label>
             <div class="col-md-3 col-sm-5">
-                <span class="form-control" id="statusName" name="statusName">@ViewData["statusName"]</span>
+                <span class="form-control" id="stateName" name="stateName">@ViewData["stateName"]</span>
             </div>
         </div>
         <div class="form-group">
@@ -65,4 +65,4 @@
         </div>
     </div>
 </form>
-<script src="~/Views/Organization/UserDetail.js"></script>
+<script src="~/AppFrontend/view-resources/Organization/UserDetail.js"></script>

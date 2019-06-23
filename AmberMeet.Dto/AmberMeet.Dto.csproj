@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AmberMeet.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AmberMeet.Domain\AmberMeet.Domain.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,6 +52,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AmberMeet.Domain\AmberMeet.Domain.csproj">
+      <Project>{28f63305-4324-41c2-a798-599cd71069c7}</Project>
+      <Name>AmberMeet.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AmberMeet.Infrastructure\AmberMeet.Infrastructure.csproj">
       <Project>{9f55bed6-6168-427e-8073-2fcbee4b0aa0}</Project>
       <Name>AmberMeet.Infrastructure</Name>

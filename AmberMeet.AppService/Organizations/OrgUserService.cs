@@ -57,7 +57,7 @@ namespace AmberMeet.AppService.Organizations
             var searchCriteria = new SearchCriteria<OrgUser>();
             if (state != null)
             {
-                searchCriteria.AddFilterCriteria(t => t.Status == state);
+                searchCriteria.AddFilterCriteria(t => t.State == state);
             }
             if (!string.IsNullOrEmpty(keywords))
             {
@@ -97,7 +97,7 @@ namespace AmberMeet.AppService.Organizations
             }
             dto.Id = ConfigHelper.NewGuid;
             dto.Password = CryptographicHelper.Hash(ConfigHelper.DefaultUserPwd);
-            dto.Status = (int) UserState.Normal;
+            dto.State = (int) UserState.Normal;
             if (string.IsNullOrEmpty(dto.Code))
             {
                 dto.Code = dto.Id;

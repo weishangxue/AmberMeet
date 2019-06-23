@@ -96,7 +96,7 @@ namespace AmberMeet.AppService.MeetSignfors
             }
             meetSignfor.Feedback = feedback;
             meetSignfor.SignTime = DateTime.Now;
-            meetSignfor.Status = (int) MeetSignforState.AlreadySigned;
+            meetSignfor.State = (int) MeetSignforState.AlreadySigned;
             _unitOfWork.Commit();
         }
 
@@ -116,7 +116,7 @@ namespace AmberMeet.AppService.MeetSignfors
 
             if (state != null)
             {
-                searchCriteria.AddFilterCriteria(t => t.Status == (int) state);
+                searchCriteria.AddFilterCriteria(t => t.State == (int) state);
             }
 
             if (activateDate != null)

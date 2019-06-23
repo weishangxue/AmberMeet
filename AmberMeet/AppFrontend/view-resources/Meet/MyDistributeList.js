@@ -19,6 +19,13 @@
             $createButton.click();
         }
     };
+
+    var reloadGrid = function() {
+        $grid.clearGridData();
+        $grid.setGridParam({ url: gridUrl() });
+        $grid.trigger("reloadGrid");
+    };
+
     var initializeGrid = function() {
         var colNames = ["主题", "会议室", "开始时间", "结束时间", "需要反馈", "未签收", "已签收", "选择"];
         var colModel = [
@@ -70,12 +77,6 @@
         });
         angel.jqGrid.initialize($grid, gridPager, colNames, colModel, null);
         angel.jqGrid.initializeGridWidth($grid);
-    };
-
-    var reloadGrid = function() {
-        $grid.clearGridData();
-        $grid.setGridParam({ url: gridUrl() });
-        $grid.trigger("reloadGrid");
     };
 
     $activateDate.addDatepicker();

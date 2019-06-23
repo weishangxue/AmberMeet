@@ -3,7 +3,7 @@
     var $orgUserErrorContainer = $("#orgUserErrorContainer");
 
     var $userId = $("#userId");
-    var $status = $("#status");
+    var $state = $("#state");
     var $loginName = $("#loginName");
     var $name = $("#name");
     var $mail = $("#mail");
@@ -25,11 +25,11 @@
         $reactivationButton.hide();
         $saveButton.hide();
         $resetPasswordButton.hide();
-        if ($status.val() == 1) { //1=正常状态
+        if ($state.val() == 1) { //1=正常状态
             $saveButton.show();
             $cancleButton.show();
             $resetPasswordButton.show();
-        } else if ($status.val() == 2) { //2=注销状态
+        } else if ($state.val() == 2) { //2=注销状态
             $reactivationButton.show();
         }
     };

@@ -8,7 +8,6 @@ using AmberMeet.Infrastructure.Exceptions;
 using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
 using AmberMeet.Models;
-using HtmlHelper = AmberMeet.Infrastructure.Utilities.HtmlHelper;
 
 namespace AmberMeet.Controllers
 {
@@ -28,8 +27,8 @@ namespace AmberMeet.Controllers
             try
             {
                 //只允许admin进入
-                if (!IsValidAccount(UserRole.Manager))
-                    return ErrorLoginView();
+                ValidationLoginV(UserRole.Manager);
+
                 ViewBag.userStates = UserState.Normal.GetDescriptions();
                 ViewBag.userRoles = UserRole.Ordinay.GetDescriptions().Where(i => i.Key != (int) UserRole.System);
                 return View();
@@ -45,16 +44,15 @@ namespace AmberMeet.Controllers
         {
             try
             {
-                if (!IsValidAccount(UserRole.Manager))
-                    return ErrorLoginView();
+                ValidationLoginV(UserRole.Manager);
                 ViewBag.sexMan = (int) UserSex.Man;
                 ViewBag.sexLady = (int) UserSex.Lady;
                 if (!string.IsNullOrEmpty(id))
                 {
                     var user = _userService.Get(id);
                     ViewData["userId"] = user.Id;
-                    ViewData["status"] = user.Status;
-                    ViewData["statusName"] = ((UserState) user.Status).ToEnumText();
+                    ViewData["state"] = user.State;
+                    ViewData["stateName"] = ((UserState) user.State).ToEnumText();
                     ViewData["loginName"] = user.LoginName;
                     ViewData["name"] = user.Name;
                     ViewData["code"] = user.Code;
@@ -97,18 +95,13 @@ namespace AmberMeet.Controllers
         {
             try
             {
-                if (!IsValidAccount(UserRole.Manager))
-                {
-                    return OkLoginError();
-                }
+                ValidationLogin(UserRole.Manager);
                 var result = _userService.GetPaged(page, rows, state, keywords);
-                return _orgJsonService.GetJqGridJson(result, page, rows);
+                return OkJqGrid(_orgJsonService.GetJqGridJson(result, page, rows));
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkExceptionStr(ex);
             }
         }
 
@@ -118,14 +111,11 @@ namespace AmberMeet.Controllers
         /// <param name="keywords">模糊条件</param>
         /// <returns></returns>
         [HttpGet]
-        public string GetUserSelectControlUserList(string keywords)
+        public ActionResult GetUserSelectControlUserList(string keywords)
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
+                ValidationLogin();
                 var userList = _userService.GetAll();
                 if (!string.IsNullOrEmpty(keywords))
                 {
@@ -137,38 +127,30 @@ namespace AmberMeet.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                return Ok(false, HtmlHelper.Encode(ex.Message));
+                return OkException(ex);
             }
         }
 
         [HttpGet]
-        public string GetUser(string userId)
+        public ActionResult GetUser(string userId)
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
-                return _userService.Get(userId).ToJson();
+                ValidationLogin();
+                return OkJson(_userService.Get(userId));
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                return Ok(false, HtmlHelper.Encode(ex.Message));
+                return OkException(ex);
             }
         }
 
         [HttpPost]
-        public string PutUser(FormCollection form)
+        public ActionResult PutUser(FormCollection form)
         {
             try
             {
-                if (!IsValidAccount(UserRole.Manager))
-                {
-                    return OkLoginError();
-                }
+                ValidationLogin(UserRole.Manager);
                 var adminUser = OrgUserDataService.FindAdmin();
                 if (SessionUserId != adminUser.Id)
                 {
@@ -188,7 +170,7 @@ namespace AmberMeet.Controllers
                 }
                 if (!string.IsNullOrEmpty(form["status"]))
                 {
-                    dto.Status = int.Parse(form["status"]);
+                    dto.State = int.Parse(form["status"]);
                 }
                 if (!string.IsNullOrEmpty(form["sex"]))
                 {
@@ -223,21 +205,16 @@ namespace AmberMeet.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
 
         [HttpPost]
-        public string PutPasswordReset(string id)
+        public ActionResult PutPasswordReset(string id)
         {
             try
             {
-                if (!IsValidAccount(UserRole.Manager))
-                {
-                    return OkLoginError();
-                }
+                ValidationLogin(UserRole.Manager);
                 var userPwd = ConfigHelper.DefaultUserPwd;
                 if (string.IsNullOrEmpty(id))
                 {
@@ -248,21 +225,16 @@ namespace AmberMeet.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
 
         [HttpPost]
-        public string PutUserCancle(string id)
+        public ActionResult PutUserCancle(string id)
         {
             try
             {
-                if (!IsValidAccount(UserRole.Manager))
-                {
-                    return OkLoginError();
-                }
+                ValidationLogin(UserRole.Manager);
                 if (string.IsNullOrEmpty(id))
                 {
                     return Ok(false, "用户ID不允许为空。");
@@ -272,21 +244,16 @@ namespace AmberMeet.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
 
         [HttpPost]
-        public string PutUserReactivation(string id)
+        public ActionResult PutUserReactivation(string id)
         {
             try
             {
-                if (!IsValidAccount(UserRole.Manager))
-                {
-                    return OkLoginError();
-                }
+                ValidationLogin(UserRole.Manager);
                 if (string.IsNullOrEmpty(id))
                 {
                     return Ok(false, "用户ID不允许为空。");
@@ -296,21 +263,16 @@ namespace AmberMeet.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
 
         [HttpPost]
-        public string PutUserRole(string userId, int userRole)
+        public ActionResult PutUserRole(string userId, int userRole)
         {
             try
             {
-                if (!IsValidAccount(UserRole.Manager))
-                {
-                    return OkLoginError();
-                }
+                ValidationLogin(UserRole.Manager);
                 if (string.IsNullOrEmpty(userId))
                 {
                     return Ok(false, "用户ID不允许为空。");
@@ -320,9 +282,7 @@ namespace AmberMeet.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
     }

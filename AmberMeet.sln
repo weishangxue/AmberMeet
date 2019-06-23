@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmberMeet.Infrastructure", "AmberMeet.Infrastructure\AmberMeet.Infrastructure.csproj", "{9F55BED6-6168-427E-8073-2FCBEE4B0AA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmberMeet.Domain", "AmberMeet.Domain\AmberMeet.Domain.csproj", "{28F63305-4324-41C2-A798-599CD71069C7}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmberMeet.AppService", "AmberMeet.AppService\AmberMeet.AppService.csproj", "{169BA54F-951F-400D-8392-F898F5C60767}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmberMeet.Test", "AmberMeet.Test\AmberMeet.Test.csproj", "{574704F9-A4A0-41D0-9097-5E8448C8454B}"
@@ -27,6 +29,10 @@ Global
 		{9F55BED6-6168-427E-8073-2FCBEE4B0AA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F55BED6-6168-427E-8073-2FCBEE4B0AA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F55BED6-6168-427E-8073-2FCBEE4B0AA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28F63305-4324-41C2-A798-599CD71069C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28F63305-4324-41C2-A798-599CD71069C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28F63305-4324-41C2-A798-599CD71069C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28F63305-4324-41C2-A798-599CD71069C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{169BA54F-951F-400D-8392-F898F5C60767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{169BA54F-951F-400D-8392-F898F5C60767}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{169BA54F-951F-400D-8392-F898F5C60767}.Release|Any CPU.ActiveCfg = Release|Any CPU

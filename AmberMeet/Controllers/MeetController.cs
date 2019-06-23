@@ -7,7 +7,6 @@ using AmberMeet.Dto.Meets;
 using AmberMeet.Infrastructure.Exceptions;
 using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
-using HtmlHelper = AmberMeet.Infrastructure.Utilities.HtmlHelper;
 
 namespace AmberMeet.Controllers
 {
@@ -29,10 +28,7 @@ namespace AmberMeet.Controllers
 
         public ActionResult Index()
         {
-            if (!IsValidAccount())
-            {
-                return ErrorLoginView();
-            }
+            ValidationLoginV();
             ViewBag.myDistributeCount = _meetQueryService.GetMyDistributeCount(SessionUserId);
             ViewBag.myActivateCount = _meetQueryService.GetMyActivateCount(SessionUserId);
             ViewBag.myWaitSignforCount = _meetSignforService.GetMyWaitSignforCount(SessionUserId);
@@ -42,28 +38,19 @@ namespace AmberMeet.Controllers
 
         public ActionResult MyDistributeList()
         {
-            if (!IsValidAccount())
-            {
-                return ErrorLoginView();
-            }
+            ValidationLoginV();
             return View();
         }
 
         public ActionResult MyActivateList()
         {
-            if (!IsValidAccount())
-            {
-                return ErrorLoginView();
-            }
+            ValidationLoginV();
             return View();
         }
 
         public ActionResult MyAllDistributeList()
         {
-            if (!IsValidAccount())
-            {
-                return ErrorLoginView();
-            }
+            ValidationLoginV();
             ViewBag.meetStates = MeetState.WaitActivate.GetDescriptions();
             return View();
         }
@@ -72,10 +59,7 @@ namespace AmberMeet.Controllers
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return ErrorLoginView();
-                }
+                ValidationLoginV();
                 if (string.IsNullOrEmpty(meetId))
                 {
                     throw new PreValidationException("会议ID不允许为空");
@@ -100,14 +84,11 @@ namespace AmberMeet.Controllers
         }
 
         [HttpPost]
-        public string PostMeet(MeetDto dto)
+        public ActionResult PostMeet(MeetDto dto)
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
+                ValidationLogin();
                 if (string.IsNullOrEmpty(dto.OwnerId))
                 {
                     dto.OwnerId = SessionUserId;
@@ -124,21 +105,16 @@ namespace AmberMeet.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
 
         [HttpPost]
-        public string PutMeetActivate(MeetDto dto)
+        public ActionResult PutMeetActivate(MeetDto dto)
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
+                ValidationLogin();
                 if (string.IsNullOrEmpty(dto.Id))
                 {
                     throw new PreValidationException("会议ID不允许为空");
@@ -160,9 +136,7 @@ namespace AmberMeet.Controllers
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
     }

@@ -29,7 +29,7 @@ namespace AmberMeet.AppService.Meets
         {
             //add meet
             var meet = Mapper.Map<Meet>(dto);
-            meet.Status = (int) MeetState.WaitActivate;
+            meet.State = (int) MeetState.WaitActivate;
             meet.StartTime = dto.StartTime.Date.AddHours(dto.StartHour).AddMinutes(dto.StartMinute);
             if (dto.EndTime != null && dto.EndHour != null && dto.EndMinute != null)
             {
@@ -50,7 +50,7 @@ namespace AmberMeet.AppService.Meets
                     SignorId = signor.Key,
                     SignorType = (int) MeetSignorType.Org, //暂时默认内部
                     IsRemind = false,
-                    Status = (int) MeetSignforState.WaitSign,
+                    State = (int) MeetSignforState.WaitSign,
                     ModifiedTime = DateTime.Now
                 };
 
@@ -99,7 +99,7 @@ namespace AmberMeet.AppService.Meets
                     SignorId = signor.Key,
                     SignorType = (int) MeetSignorType.Org, //暂时默认内部
                     IsRemind = false,
-                    Status = (int) MeetSignforState.WaitSign,
+                    State = (int) MeetSignforState.WaitSign,
                     ModifiedTime = DateTime.Now
                 };
 
@@ -117,9 +117,9 @@ namespace AmberMeet.AppService.Meets
                 throw new ArgumentNullException(ExMessage.MustNotBeNullOrEmpty(nameof(meetId)));
             }
             var meet = _repository.First(meetId);
-            if (meet.Status != (int) MeetState.WaitActivate)
+            if (meet.State != (int) MeetState.WaitActivate)
             {
-                throw new ArgumentOutOfRangeException(nameof(meet.Status));
+                throw new ArgumentOutOfRangeException(nameof(meet.State));
             }
             meet.MeetActivate = new MeetActivate
             {
@@ -130,15 +130,15 @@ namespace AmberMeet.AppService.Meets
                 CreateTime = DateTime.Now,
                 ModifiedTime = DateTime.Now
             };
-            meet.Status = (int) MeetState.Activate;
+            meet.State = (int) MeetState.Activate;
             meet.ModifiedTime = DateTime.Now;
 
             var signforCount = meet.MeetSignfors.Count;
             for (var i = 0; i < signforCount; i++)
             {
-                if (meet.MeetSignfors[i].Status == (int) MeetSignforState.WaitSign)
+                if (meet.MeetSignfors[i].State == (int) MeetSignforState.WaitSign)
                 {
-                    meet.MeetSignfors[i].Status = (int) MeetSignforState.AutoSigned;
+                    meet.MeetSignfors[i].State = (int) MeetSignforState.AutoSigned;
                     if (meet.NeedFeedback)
                     {
                         meet.MeetSignfors[i].Feedback = MeetSignforState.AutoSigned.ToEnumText();

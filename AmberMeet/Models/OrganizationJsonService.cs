@@ -2,14 +2,13 @@
 using System.Linq;
 using AmberMeet.Dto.Organizations;
 using AmberMeet.Infrastructure.Search.Paging;
-using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Models.JsonJqGrids;
 
 namespace AmberMeet.Models
 {
     internal class OrganizationJsonService
     {
-        public string GetJqGridJson(PagedResult<OrgUserPagedDto> pagedResult, int pageIndex, int pageSize)
+        public JqGridObject GetJqGridJson(PagedResult<OrgUserPagedDto> pagedResult, int pageIndex, int pageSize)
         {
             IList<JqGridRowObject> rows =
                 pagedResult.Entities.Select(item => new JqGridRowObject(item.Id, new[]
@@ -23,8 +22,7 @@ namespace AmberMeet.Models
                     item.RoleText,
                     GetSelectBtn(item.Id)
                 })).ToList();
-            var jsonJqGridObject = new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
-            return jsonJqGridObject.ToJson(true);
+            return new JqGridObject(rows, pagedResult.Count, pageIndex, pageSize);
         }
 
         private string GetSelectItem(string itemId, string itemName)

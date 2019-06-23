@@ -86,9 +86,9 @@ namespace AmberMeet.AppService.Meets
             foreach (var resultDto in resultList)
             {
                 var resultSignfors = signfors.Where(i => i.MeetId == resultDto.Id).ToList();
-                var resultWaitSigns = resultSignfors.Where(i => i.Status == (int) MeetSignforState.WaitSign).ToList();
+                var resultWaitSigns = resultSignfors.Where(i => i.State == (int) MeetSignforState.WaitSign).ToList();
                 var resultAlreadySigneds =
-                    resultSignfors.Where(i => i.Status == (int) MeetSignforState.AlreadySigned).ToList();
+                    resultSignfors.Where(i => i.State == (int) MeetSignforState.AlreadySigned).ToList();
 
                 var resultWaitSignUsers =
                     signors.Where(t => resultWaitSigns.Select(i => i.SignorId).ToArray().Contains(t.Id)).ToList();
@@ -140,7 +140,7 @@ namespace AmberMeet.AppService.Meets
             searchCriteria.AddFilterCriteria(t => t.OwnerId == ownerId);
             if (state != null)
             {
-                searchCriteria.AddFilterCriteria(t => t.Status == (int) state);
+                searchCriteria.AddFilterCriteria(t => t.State == (int) state);
             }
             if (activateDate != null)
             {
@@ -178,7 +178,7 @@ namespace AmberMeet.AppService.Meets
                 IList<string> resultSignorNames = new List<string>();
                 foreach (var resultSignfor in resultSignfors)
                 {
-                    var signStateStr = ((MeetSignforState) resultSignfor.Status).ToEnumText();
+                    var signStateStr = ((MeetSignforState) resultSignfor.State).ToEnumText();
                     var signor = signors.FirstOrDefault(i => i.Id == resultSignfor.SignorId);
                     if (signor == null)
                     {

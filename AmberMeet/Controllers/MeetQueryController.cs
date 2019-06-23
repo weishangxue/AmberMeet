@@ -2,10 +2,8 @@
 using System.Web.Mvc;
 using AmberMeet.AppService.Meets;
 using AmberMeet.Domain.Meets;
-using AmberMeet.Infrastructure.Serialization;
 using AmberMeet.Infrastructure.Utilities;
 using AmberMeet.Models;
-using HtmlHelper = AmberMeet.Infrastructure.Utilities.HtmlHelper;
 
 namespace AmberMeet.Controllers
 {
@@ -26,23 +24,18 @@ namespace AmberMeet.Controllers
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
+                ValidationLogin();
                 DateTime? activateDate = null;
                 if (!string.IsNullOrEmpty(activateIsoDate))
                 {
                     activateDate = DateTimeHelper.GetIsoDateValue(activateIsoDate);
                 }
                 var list = _meetQueryService.GetWaitActivates(page, rows, keywords, SessionUserId, activateDate);
-                return _meetJsonService.GetMyDistributeJqGridJson(list, page, rows);
+                return OkJqGrid(_meetJsonService.GetMyDistributeJqGridJson(list, page, rows));
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkExceptionStr(ex);
             }
         }
 
@@ -52,23 +45,17 @@ namespace AmberMeet.Controllers
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
                 DateTime? activateDate = null;
                 if (!string.IsNullOrEmpty(activateIsoDate))
                 {
                     activateDate = DateTimeHelper.GetIsoDateValue(activateIsoDate);
                 }
                 var list = _meetQueryService.GetActivates(page, rows, keywords, SessionUserId, activateDate);
-                return _meetJsonService.GetMyActivateJqGridJson(list, page, rows);
+                return OkJqGrid(_meetJsonService.GetMyActivateJqGridJson(list, page, rows));
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkExceptionStr(ex);
             }
         }
 
@@ -78,10 +65,6 @@ namespace AmberMeet.Controllers
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
                 DateTime? activateDate = null;
                 if (!string.IsNullOrEmpty(activateIsoDate))
                 {
@@ -94,32 +77,25 @@ namespace AmberMeet.Controllers
                 }
                 var list = _meetQueryService.GetAllDistributes(
                     page, rows, keywords, SessionUserId, activateDate, meetState);
-                return _meetJsonService.GetMyAllDistributeJqGridJson(list, page, rows);
+                return OkJqGrid(_meetJsonService.GetMyAllDistributeJqGridJson(list, page, rows));
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkExceptionStr(ex);
             }
         }
 
         [HttpGet]
-        public string GetMeetDetail(string id)
+        public ActionResult GetMeetDetail(string id)
         {
             try
             {
-                if (!IsValidAccount())
-                {
-                    return OkLoginError();
-                }
-                return _meetQueryService.GetDetail(id).ToJson();
+                ValidationLogin();
+                return OkJson(_meetQueryService.GetDetail(id));
             }
             catch (Exception ex)
             {
-                LogHelper.ExceptionLog(ex);
-                var result = HtmlHelper.Encode(ex.Message);
-                return Ok(false, result);
+                return OkException(ex);
             }
         }
     }

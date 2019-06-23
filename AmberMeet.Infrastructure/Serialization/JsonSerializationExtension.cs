@@ -6,7 +6,7 @@ namespace AmberMeet.Infrastructure.Serialization
 {
     public static class JsonSerializationExtension
     {
-        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        public static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };

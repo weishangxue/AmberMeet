@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 12" name="AmberMeet">
+  <DataContextMoniker Name="/AmberMeetDataContext" />
+  <nestedChildShapes>
+    <classShape Id="09455b66-b366-4e0c-b9f5-9d79e283e088" absoluteBounds="3.75, 7, 2, 2.5266442871093755">
+      <DataClassMoniker Name="/AmberMeetDataContext/FileMap" />
+      <nestedChildShapes>
+        <elementListCompartment Id="dc97cf68-3b41-4274-9295-9dce2da50b8f" absoluteBounds="3.765, 7.46, 1.9700000000000002, 1.966644287109375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f6c91672-536b-4b7d-8ebc-29e8a8d7981b" absoluteBounds="3.5, 0.75, 2, 2.5266442871093751">
+      <DataClassMoniker Name="/AmberMeetDataContext/MeetSignfor" />
+      <nestedChildShapes>
+        <elementListCompartment Id="74d5b56a-ec18-4d56-afe7-e33df422942e" absoluteBounds="3.515, 1.21, 1.9700000000000002, 1.966644287109375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="386e1d0b-93ab-4f24-9c65-9263acf34aa2" absoluteBounds="0.75, 3.5, 2, 3.0997033691406255">
+      <DataClassMoniker Name="/AmberMeetDataContext/Meet" />
+      <nestedChildShapes>
+        <elementListCompartment Id="780be7a1-291d-4628-9343-fba4307bd31e" absoluteBounds="0.765, 3.96, 1.9700000000000002, 2.539703369140625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="dead094f-3d4b-42fe-b8e1-cc7f0ffbafbc" absoluteBounds="3.5, 4, 2, 1.9535852050781255">
+      <DataClassMoniker Name="/AmberMeetDataContext/MeetActivate" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7891394f-2b2f-4f44-99b7-c5f64c6f771d" absoluteBounds="3.515, 4.46, 1.9700000000000002, 1.393585205078125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="70220ee7-ac94-4ff3-8df5-2f35e502344f" absoluteBounds="0.75, 8.25, 2, 3.4817427571614594">
+      <DataClassMoniker Name="/AmberMeetDataContext/OrgUser" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a894ff62-6235-4e65-a06c-9bc4fbb16b90" absoluteBounds="0.765, 8.71, 1.9700000000000002, 2.921742757161458" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(1.75 : 3.5); (1.75 : 2.01332214355469); (3.5 : 2.01332214355469)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/AmberMeetDataContext/Meet/Meet_MeetSignfor" />
+      <nodes>
+        <classShapeMoniker Id="386e1d0b-93ab-4f24-9c65-9263acf34aa2" />
+        <classShapeMoniker Id="f6c91672-536b-4b7d-8ebc-29e8a8d7981b" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 4.97679260253906); (3.04166666666667 : 4.97679260253906 : JumpStart); (3.20833333333333 : 4.97679260253906 : JumpEnd); (3.5 : 4.97679260253906)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/AmberMeetDataContext/Meet/Meet_MeetActivate" />
+      <nodes>
+        <classShapeMoniker Id="386e1d0b-93ab-4f24-9c65-9263acf34aa2" />
+        <classShapeMoniker Id="dead094f-3d4b-42fe-b8e1-cc7f0ffbafbc" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 8.25153746153846); (3.125 : 7.87653746153846); (3.125 : 2.67623521533203); (3.5 : 2.67623521533203)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+      <AssociationMoniker Name="/AmberMeetDataContext/OrgUser/OrgUser_MeetSignfor" />
+      <nodes>
+        <classShapeMoniker Id="70220ee7-ac94-4ff3-8df5-2f35e502344f" />
+        <classShapeMoniker Id="f6c91672-536b-4b7d-8ebc-29e8a8d7981b" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

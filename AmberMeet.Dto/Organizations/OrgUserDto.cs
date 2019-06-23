@@ -21,7 +21,7 @@ namespace AmberMeet.Dto.Organizations
         public int Sex { get; set; }
         public DateTime? Birthday { get; set; }
         public int Role { get; set; }
-        public int Status { get; set; }
+        public int State { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime ModifiedTime { get; set; }
 
